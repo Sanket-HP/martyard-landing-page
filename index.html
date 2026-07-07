@@ -1,0 +1,1304 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Martyard | Digital Operating System for India's Local Commerce</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            deep: '#030712',
+                            slate: '#0f172a',
+                            accent: '#3b82f6',
+                            emerald: '#10b981',
+                            indigo: '#6366f1'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['system-ui', '-apple-system', 'BlinkMacSystemFont', '"Segoe UI"', 'Roboto', 'Helvetica', 'Arial', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #030712;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #1e293b;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #334155;
+        }
+        /* Custom glow text and background animations */
+        .glow-blue {
+            text-shadow: 0 0 20px rgba(59, 130, 246, 0.4);
+        }
+        .glow-emerald {
+            text-shadow: 0 0 20px rgba(16, 185, 129, 0.4);
+        }
+        .bg-grid-pattern {
+            background-image: radial-gradient(rgba(255, 255, 255, 0.04) 1px, transparent 1px);
+            background-size: 24px 24px;
+        }
+        .bg-glow-radial {
+            background: radial-gradient(circle at 50% 50%, rgba(59, 130, 246, 0.15), transparent 60%);
+        }
+        .bg-glow-emerald-radial {
+            background: radial-gradient(circle at 50% 50%, rgba(16, 185, 129, 0.12), transparent 50%);
+        }
+    </style>
+</head>
+<body class="bg-brand-deep text-slate-100 font-sans relative antialiased selection:bg-brand-accent/30 selection:text-white">
+
+    <!-- Global Background Elements -->
+    <div class="fixed inset-0 bg-grid-pattern pointer-events-none z-0"></div>
+    <div class="fixed top-[-10%] left-[-10%] w-[50%] h-[50%] bg-glow-radial rounded-full pointer-events-none z-0 blur-3xl"></div>
+    <div class="fixed bottom-[-10%] right-[-10%] w-[50%] h-[50%] bg-glow-emerald-radial rounded-full pointer-events-none z-0 blur-3xl"></div>
+
+    <!-- Live Toast Notification Center -->
+    <div id="toast-container" class="fixed bottom-6 right-6 z-50 flex flex-col gap-3 max-w-sm w-full pointer-events-none"></div>
+
+    <!-- Navigation Header -->
+    <header class="sticky top-0 z-40 bg-brand-deep/80 backdrop-blur-md border-b border-slate-800/60 transition-all duration-300">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+            <!-- Brand Logo -->
+            <a href="#" class="flex items-center space-x-3 group">
+                <div class="w-10 h-10 bg-gradient-to-tr from-brand-accent via-indigo-500 to-brand-emerald rounded-xl flex items-center justify-center font-extrabold text-white text-xl shadow-lg shadow-brand-accent/25 group-hover:scale-105 transition-transform duration-300">
+                    M
+                </div>
+                <div>
+                    <span class="text-xl font-bold tracking-tight text-white group-hover:text-brand-accent transition-colors">Martyard</span>
+                    <span class="block text-[9px] text-slate-400 font-semibold tracking-widest uppercase">Digital Infra</span>
+                </div>
+            </a>
+
+            <!-- Desktop Nav Links -->
+            <nav class="hidden md:flex items-center space-x-8 text-sm font-medium text-slate-300">
+                <a href="#vision" class="hover:text-white transition-colors">Vision</a>
+                <a href="#product-dashboard" class="hover:text-white transition-colors flex items-center gap-1.5">
+                    Live Platform <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+                </a>
+                <a href="#modules" class="hover:text-white transition-colors">Infrastructure</a>
+                <a href="#investor-deck" class="hover:text-white transition-colors">Investor Hub</a>
+                <a href="#competition" class="hover:text-white transition-colors">Why We Win</a>
+            </nav>
+
+            <!-- Actions -->
+            <div class="hidden md:flex items-center space-x-4">
+                <a href="#investor-deck" class="text-sm font-medium text-slate-300 hover:text-white transition-colors">SME TAM Model</a>
+                <a href="#demo-simulator" class="px-5 py-2.5 bg-gradient-to-r from-brand-accent to-brand-indigo hover:from-blue-500 hover:to-indigo-600 text-white rounded-xl text-sm font-semibold shadow-lg shadow-brand-accent/20 hover:shadow-brand-accent/30 transition-all duration-300 active:scale-95">
+                    Book Board Meeting
+                </a>
+            </div>
+
+            <!-- Mobile Menu Toggle Button -->
+            <button id="mobile-menu-toggle" class="md:hidden p-2 text-slate-400 hover:text-white focus:outline-none" aria-label="Toggle menu">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path id="menu-icon" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
+            </button>
+        </div>
+
+        <!-- Mobile Dropdown Nav Menu -->
+        <div id="mobile-menu" class="hidden md:hidden bg-brand-slate border-b border-slate-800 px-4 py-6 space-y-4 text-center">
+            <a href="#vision" class="block text-slate-300 hover:text-white py-2">Vision</a>
+            <a href="#product-dashboard" class="block text-slate-300 hover:text-white py-2 font-semibold text-emerald-400">Live Platform Demo</a>
+            <a href="#modules" class="block text-slate-300 hover:text-white py-2">Infrastructure</a>
+            <a href="#investor-deck" class="block text-slate-300 hover:text-white py-2">Investor Hub</a>
+            <a href="#competition" class="block text-slate-300 hover:text-white py-2">Why We Win</a>
+            <div class="pt-4 border-t border-slate-800 flex flex-col space-y-3">
+                <a href="#demo-simulator" class="w-full py-3 bg-brand-accent text-white rounded-xl text-sm font-semibold">Book Board Meeting</a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content Section -->
+    <main class="relative z-10">
+
+        <!-- 1. Hero Section -->
+        <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-12 pb-24 lg:pt-20 lg:pb-32">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 items-center">
+                
+                <!-- Hero Left: Strategic Messaging -->
+                <div class="lg:col-span-5 space-y-8 text-center lg:text-left">
+                    <div class="inline-flex items-center space-x-2 bg-slate-900/80 border border-slate-800 rounded-full px-4 py-1.5 text-xs text-brand-emerald font-medium">
+                        <span class="flex h-2 w-2 relative">
+                            <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-brand-emerald opacity-75"></span>
+                            <span class="relative inline-flex rounded-full h-2 w-2 bg-brand-emerald"></span>
+                        </span>
+                        <span>Official Live Product Showcase</span>
+                    </div>
+
+                    <h1 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight leading-tight bg-gradient-to-b from-white via-slate-100 to-slate-400 bg-clip-text text-transparent">
+                        The Digital Operating System for <span class="bg-gradient-to-r from-brand-accent to-brand-emerald bg-clip-text text-transparent">India's Local Commerce</span>
+                    </h1>
+
+                    <p class="text-base sm:text-lg text-slate-400 max-w-xl mx-auto lg:mx-0 leading-relaxed">
+                        Martyard enables India's 63 million small and medium enterprises to register verified digital trust identities, coordinate payments, catalog inventory, track verified reviews, and secure live local customer leads on the cloud.
+                    </p>
+
+                    <div class="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4">
+                        <a href="#product-dashboard" class="w-full sm:w-auto px-8 py-4 bg-gradient-to-r from-brand-accent via-blue-600 to-brand-indigo hover:opacity-95 text-white rounded-xl text-base font-bold text-center shadow-xl shadow-brand-accent/20 transition-all duration-300">
+                            Explore Real Platform Below
+                        </a>
+                        <a href="#demo-simulator" class="w-full sm:w-auto px-8 py-4 bg-slate-900 border border-slate-800 hover:bg-slate-800 text-slate-200 hover:text-white rounded-xl text-base font-bold text-center transition-all duration-300">
+                            Try Lead Simulator
+                        </a>
+                    </div>
+
+                    <!-- Micro Social Proof Stats -->
+                    <div class="pt-8 border-t border-slate-900 grid grid-cols-3 gap-4 text-center lg:text-left">
+                        <div>
+                            <span class="block text-2xl font-bold text-white tracking-tight">63M+</span>
+                            <span class="text-xs text-slate-500 font-medium uppercase tracking-wider">Indian SMEs TAM</span>
+                        </div>
+                        <div>
+                            <span class="block text-2xl font-bold text-brand-emerald tracking-tight">100%</span>
+                            <span class="text-xs text-slate-500 font-medium uppercase tracking-wider">GSTIN Secured</span>
+                        </div>
+                        <div>
+                            <span class="block text-2xl font-bold text-brand-accent tracking-tight">ONDC</span>
+                            <span class="text-xs text-slate-500 font-medium uppercase tracking-wider">Protocol Integrated</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Hero Right: High Fidelity Real Martyard Workspace Widget -->
+                <div class="lg:col-span-7" id="product-dashboard">
+                    <div class="bg-slate-900/95 border-2 border-slate-800 rounded-2xl shadow-2xl shadow-black/50 overflow-hidden">
+                        
+                        <!-- Top Chrome Bar -->
+                        <div class="bg-brand-slate px-4 py-3 flex items-center justify-between border-b border-slate-800">
+                            <div class="flex items-center space-x-2">
+                                <span class="w-3 h-3 rounded-full bg-rose-500"></span>
+                                <span class="w-3 h-3 rounded-full bg-amber-500"></span>
+                                <span class="w-3 h-3 rounded-full bg-emerald-500"></span>
+                                <span class="text-xs font-semibold text-slate-500 tracking-wider pl-4">MARTYARD MERCHANT WORKSPACE v2.5</span>
+                            </div>
+                            <div class="flex items-center space-x-1.5 bg-slate-950 px-2.5 py-1 rounded-md border border-slate-800">
+                                <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+                                <span class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Active Sync</span>
+                            </div>
+                        </div>
+
+                        <!-- Main Interface Splitter -->
+                        <div class="grid grid-cols-1 md:grid-cols-12 min-h-[460px]">
+                            
+                            <!-- Sidebar Controls -->
+                            <div class="md:col-span-3 bg-slate-950/80 p-4 border-r border-slate-800 flex flex-col justify-between">
+                                <div class="space-y-1">
+                                    <p class="text-[10px] font-bold text-slate-500 tracking-widest uppercase px-2 mb-2">Core Hub</p>
+                                    
+                                    <!-- Workspace Navigation Tabs -->
+                                    <button onclick="switchTab('overview')" id="tab-overview" class="w-full flex items-center space-x-2.5 px-3 py-2.5 rounded-lg text-xs font-medium text-slate-300 hover:bg-slate-900 transition-all text-left bg-slate-900 border-l-2 border-brand-accent text-white">
+                                        <svg class="w-4 h-4 text-brand-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 002 2h2a2 2 0 002-2"></path></svg>
+                                        <span>Overview</span>
+                                    </button>
+
+                                    <button onclick="switchTab('catalog')" id="tab-catalog" class="w-full flex items-center space-x-2.5 px-3 py-2.5 rounded-lg text-xs font-medium text-slate-400 hover:bg-slate-900 transition-all text-left">
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 10v4a2 2 0 002 2h1.2"></path></svg>
+                                        <span>Live Catalog</span>
+                                    </button>
+
+                                    <button onclick="switchTab('reviews')" id="tab-reviews" class="w-full flex items-center space-x-2.5 px-3 py-2.5 rounded-lg text-xs font-medium text-slate-400 hover:bg-slate-900 transition-all text-left">
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.907c.961 0 1.362 1.248.58 1.81l-3.97 2.88a1 1 0 00-.364 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.971-2.88a1 1 0 00-1.176 0l-3.97 2.88c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.364-1.118l-3.97-2.88c-.782-.563-.381-1.81.58-1.81h4.908a1 1 0 00.95-.69l1.519-4.674z"></path></svg>
+                                        <span>Reviews Queue</span>
+                                    </button>
+
+                                    <button onclick="switchTab('leads')" id="tab-leads" class="w-full flex items-center space-x-2.5 px-3 py-2.5 rounded-lg text-xs font-medium text-slate-400 hover:bg-slate-900 transition-all text-left relative">
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"></path></svg>
+                                        <span>Lead Inbox</span>
+                                        <span id="lead-count-badge" class="absolute right-2 top-2.5 bg-brand-emerald text-slate-950 font-bold text-[9px] px-1.5 py-0.5 rounded-full">3</span>
+                                    </button>
+                                </div>
+
+                                <!-- Mini business card display -->
+                                <div class="bg-slate-900 p-3 rounded-lg border border-slate-800 space-y-1">
+                                    <div class="flex items-center justify-between">
+                                        <p class="text-[10px] font-bold text-brand-emerald tracking-wide">VERIFIED MERCHANT</p>
+                                        <span class="w-2.5 h-2.5 text-brand-emerald">
+                                            <svg fill="currentColor" viewBox="0 0 20 20"><path d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"></path></svg>
+                                        </span>
+                                    </div>
+                                    <p class="text-xs font-bold text-white">Apex Diagnostics</p>
+                                    <p class="text-[9px] text-slate-400">GSTIN: 27AACPD1854C2ZM</p>
+                                </div>
+                            </div>
+
+                            <!-- Dashboard Canvas (Changes dynamically on clicking sidebar) -->
+                            <div class="md:col-span-9 p-6 flex flex-col justify-between space-y-6">
+
+                                <!-- Pane 1: Overview Tab Container -->
+                                <div id="pane-overview" class="space-y-6">
+                                    <div class="flex items-center justify-between">
+                                        <div>
+                                            <h3 class="text-sm font-bold text-white uppercase tracking-wider">Business Analytics Core</h3>
+                                            <p class="text-xs text-slate-400">Performance insights tracking local ONDC & search indexes.</p>
+                                        </div>
+                                        <span class="text-xs font-semibold bg-slate-950 text-slate-400 px-3 py-1 rounded border border-slate-800">M-Month: July 2026</span>
+                                    </div>
+
+                                    <!-- Core Metric Blocks -->
+                                    <div class="grid grid-cols-3 gap-4">
+                                        <div class="bg-slate-950 p-3.5 rounded-xl border border-slate-800">
+                                            <span class="text-[10px] text-slate-400 uppercase font-medium">Platform Leads</span>
+                                            <span class="block text-xl font-bold text-white mt-1">482 <span class="text-xs text-emerald-400 font-normal">+18%</span></span>
+                                        </div>
+                                        <div class="bg-slate-950 p-3.5 rounded-xl border border-slate-800">
+                                            <span class="text-[10px] text-slate-400 uppercase font-medium">Review Rating</span>
+                                            <span class="block text-xl font-bold text-amber-400 mt-1">4.92 <span class="text-[10px] text-slate-500 font-normal">/ 5★</span></span>
+                                        </div>
+                                        <div class="bg-slate-950 p-3.5 rounded-xl border border-slate-800">
+                                            <span class="text-[10px] text-slate-400 uppercase font-medium">Profile Impressions</span>
+                                            <span class="block text-xl font-bold text-brand-accent mt-1">14,240 <span class="text-xs text-emerald-400 font-normal">+34%</span></span>
+                                        </div>
+                                    </div>
+
+                                    <!-- Interactive Dynamic High-Fidelity CSS Chart -->
+                                    <div class="bg-slate-950 p-4 rounded-xl border border-slate-800 space-y-4">
+                                        <div class="flex items-center justify-between text-xs">
+                                            <span class="font-semibold text-slate-300">Customer Discovery Index (Daily Trend)</span>
+                                            <div class="flex space-x-3 text-[10px] font-bold">
+                                                <span class="flex items-center gap-1 text-brand-accent"><span class="w-2 h-2 rounded-full bg-brand-accent"></span> Search Leads</span>
+                                                <span class="flex items-center gap-1 text-brand-emerald"><span class="w-2 h-2 rounded-full bg-brand-emerald"></span> Verified Calls</span>
+                                            </div>
+                                        </div>
+                                        
+                                        <!-- Styled CSS Graph Columns -->
+                                        <div class="h-32 flex items-end justify-between gap-1.5 pt-4 border-b border-slate-800/80">
+                                            <div class="w-full flex flex-col items-center h-full justify-end group">
+                                                <div class="w-full bg-gradient-to-t from-brand-accent/40 to-brand-accent h-[45%] rounded-t-sm group-hover:brightness-125 transition-all"></div>
+                                                <div class="w-full bg-brand-emerald/70 h-[30%] rounded-t-sm mt-[2px] group-hover:brightness-125 transition-all"></div>
+                                                <span class="text-[9px] text-slate-500 mt-2">Mon</span>
+                                            </div>
+                                            <div class="w-full flex flex-col items-center h-full justify-end group">
+                                                <div class="w-full bg-gradient-to-t from-brand-accent/40 to-brand-accent h-[55%] rounded-t-sm group-hover:brightness-125 transition-all"></div>
+                                                <div class="w-full bg-brand-emerald/70 h-[38%] rounded-t-sm mt-[2px] group-hover:brightness-125 transition-all"></div>
+                                                <span class="text-[9px] text-slate-500 mt-2">Tue</span>
+                                            </div>
+                                            <div class="w-full flex flex-col items-center h-full justify-end group">
+                                                <div class="w-full bg-gradient-to-t from-brand-accent/40 to-brand-accent h-[75%] rounded-t-sm group-hover:brightness-125 transition-all"></div>
+                                                <div class="w-full bg-brand-emerald/70 h-[50%] rounded-t-sm mt-[2px] group-hover:brightness-125 transition-all"></div>
+                                                <span class="text-[9px] text-slate-500 mt-2">Wed</span>
+                                            </div>
+                                            <div class="w-full flex flex-col items-center h-full justify-end group">
+                                                <div class="w-full bg-gradient-to-t from-brand-accent/40 to-brand-accent h-[60%] rounded-t-sm group-hover:brightness-125 transition-all"></div>
+                                                <div class="w-full bg-brand-emerald/70 h-[45%] rounded-t-sm mt-[2px] group-hover:brightness-125 transition-all"></div>
+                                                <span class="text-[9px] text-slate-500 mt-2">Thu</span>
+                                            </div>
+                                            <div class="w-full flex flex-col items-center h-full justify-end group">
+                                                <div class="w-full bg-gradient-to-t from-brand-accent/40 to-brand-accent h-[85%] rounded-t-sm group-hover:brightness-125 transition-all"></div>
+                                                <div class="w-full bg-brand-emerald/70 h-[65%] rounded-t-sm mt-[2px] group-hover:brightness-125 transition-all"></div>
+                                                <span class="text-[9px] text-slate-300 font-bold mt-2">Fri</span>
+                                            </div>
+                                            <div class="w-full flex flex-col items-center h-full justify-end group">
+                                                <div class="w-full bg-gradient-to-t from-brand-accent/40 to-brand-accent h-[92%] rounded-t-sm group-hover:brightness-125 transition-all animate-pulse"></div>
+                                                <div class="w-full bg-brand-emerald/70 h-[80%] rounded-t-sm mt-[2px] group-hover:brightness-125 transition-all"></div>
+                                                <span class="text-[9px] text-slate-500 mt-2">Sat</span>
+                                            </div>
+                                            <div class="w-full flex flex-col items-center h-full justify-end group">
+                                                <div class="w-full bg-gradient-to-t from-brand-accent/40 to-brand-accent h-[50%] rounded-t-sm group-hover:brightness-125 transition-all"></div>
+                                                <div class="w-full bg-brand-emerald/70 h-[40%] rounded-t-sm mt-[2px] group-hover:brightness-125 transition-all"></div>
+                                                <span class="text-[9px] text-slate-500 mt-2">Sun</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Pane 2: Catalog Tab Container (Hidden by default) -->
+                                <div id="pane-catalog" class="hidden space-y-4">
+                                    <div class="flex items-center justify-between">
+                                        <div>
+                                            <h3 class="text-sm font-bold text-white uppercase tracking-wider">Cloud Catalog Services</h3>
+                                            <p class="text-xs text-slate-400">Verify and publish pricing and schedules onto ONDC protocol.</p>
+                                        </div>
+                                        <button onclick="addNewCatalogItem()" class="px-2.5 py-1 bg-brand-accent text-white rounded text-[11px] font-bold hover:opacity-90 transition-all">+ Add Service</button>
+                                    </div>
+
+                                    <div class="space-y-2.5 max-h-[300px] overflow-y-auto pr-1" id="catalog-items-container">
+                                        <!-- Core Catalog Items List -->
+                                        <div class="bg-slate-950 p-3 rounded-lg border border-slate-800 flex items-center justify-between">
+                                            <div class="flex items-center space-x-3">
+                                                <span class="w-8 h-8 rounded-lg bg-indigo-950 text-brand-indigo flex items-center justify-center text-xs font-bold border border-brand-indigo/30">LAB</span>
+                                                <div>
+                                                    <p class="text-xs font-bold text-slate-100">Full Body Executive Health Screening</p>
+                                                    <p class="text-[10px] text-slate-400">72 essential parameters with certified reporting</p>
+                                                </div>
+                                            </div>
+                                            <div class="text-right">
+                                                <p class="text-xs font-bold text-brand-emerald">₹2,999</p>
+                                                <span class="text-[9px] bg-slate-900 border border-slate-800 text-slate-400 px-1.5 py-0.5 rounded font-semibold">Active ONDC</span>
+                                            </div>
+                                        </div>
+
+                                        <div class="bg-slate-950 p-3 rounded-lg border border-slate-800 flex items-center justify-between">
+                                            <div class="flex items-center space-x-3">
+                                                <span class="w-8 h-8 rounded-lg bg-emerald-950 text-brand-emerald flex items-center justify-center text-xs font-bold border border-brand-emerald/30">MD</span>
+                                                <div>
+                                                    <p class="text-xs font-bold text-slate-100">Senior Consultant Pediatric Consultation</p>
+                                                    <p class="text-[10px] text-slate-400">In-clinic priority consultation with digital prescription</p>
+                                                </div>
+                                            </div>
+                                            <div class="text-right">
+                                                <p class="text-xs font-bold text-brand-emerald">₹800</p>
+                                                <span class="text-[9px] bg-slate-900 border border-slate-800 text-slate-400 px-1.5 py-0.5 rounded font-semibold">Active ONDC</span>
+                                            </div>
+                                        </div>
+
+                                        <div class="bg-slate-950 p-3 rounded-lg border border-slate-800 flex items-center justify-between">
+                                            <div class="flex items-center space-x-3">
+                                                <span class="w-8 h-8 rounded-lg bg-blue-950 text-brand-accent flex items-center justify-center text-xs font-bold border border-brand-accent/30">USG</span>
+                                                <div>
+                                                    <p class="text-xs font-bold text-slate-100">Advanced 3D Pelvic Ultrasound scan</p>
+                                                    <p class="text-[10px] text-slate-400">Certified sonologist with immediate report synthesis</p>
+                                                </div>
+                                            </div>
+                                            <div class="text-right">
+                                                <p class="text-xs font-bold text-brand-emerald">₹1,850</p>
+                                                <span class="text-[9px] bg-slate-900 border border-slate-800 text-slate-400 px-1.5 py-0.5 rounded font-semibold">Active ONDC</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Pane 3: Reviews Tab Container (Hidden by default) -->
+                                <div id="pane-reviews" class="hidden space-y-4">
+                                    <div class="flex items-center justify-between">
+                                        <div>
+                                            <h3 class="text-sm font-bold text-white uppercase tracking-wider">Secure Verified Reviews Ledger</h3>
+                                            <p class="text-xs text-slate-400">Tamper-proof reviews authenticated via Government SMS & GPS triangulation.</p>
+                                        </div>
+                                    </div>
+
+                                    <div class="space-y-3">
+                                        <!-- Review Card -->
+                                        <div class="bg-slate-950 p-3.5 rounded-lg border border-slate-800 space-y-2">
+                                            <div class="flex items-center justify-between text-xs">
+                                                <div class="flex items-center space-x-2">
+                                                    <span class="w-6 h-6 rounded-full bg-slate-800 text-[10px] font-bold text-slate-300 flex items-center justify-center">AS</span>
+                                                    <span class="font-bold text-slate-200">Aditya Sen</span>
+                                                    <span class="text-[9px] bg-emerald-950/80 text-brand-emerald border border-brand-emerald/30 px-1.5 py-0.2 rounded">GPS Verified Client</span>
+                                                </div>
+                                                <span class="text-[10px] text-slate-500">2 hours ago</span>
+                                            </div>
+                                            <div class="flex items-center space-x-1">
+                                                <span class="text-amber-400 text-xs">★★★★★</span>
+                                                <span class="text-[10px] font-bold text-slate-400">(Comprehensive Metabolic Panel Review)</span>
+                                            </div>
+                                            <p class="text-xs text-slate-300 leading-relaxed">
+                                                "Extremely prompt. Received the digital report on my Martyard dashboard with full QR validation. No wait times at the counter."
+                                            </p>
+                                            <div class="pt-2 border-t border-slate-900 flex justify-end">
+                                                <button onclick="triggerToast('Reply submitted to client ledger successfully.')" class="px-3 py-1 bg-slate-900 border border-slate-800 hover:bg-slate-800 text-[10px] text-slate-400 rounded-md font-bold transition-all">Reply as Merchant</button>
+                                            </div>
+                                        </div>
+
+                                        <div class="bg-slate-950 p-3.5 rounded-lg border border-slate-800 space-y-2">
+                                            <div class="flex items-center justify-between text-xs">
+                                                <div class="flex items-center space-x-2">
+                                                    <span class="w-6 h-6 rounded-full bg-slate-800 text-[10px] font-bold text-slate-300 flex items-center justify-center">RM</span>
+                                                    <span class="font-bold text-slate-200">Reema Mehta</span>
+                                                    <span class="text-[9px] bg-emerald-950/80 text-brand-emerald border border-brand-emerald/30 px-1.5 py-0.2 rounded">OTP Authenticated</span>
+                                                </div>
+                                                <span class="text-[10px] text-slate-500">Yesterday</span>
+                                            </div>
+                                            <div class="flex items-center space-x-1">
+                                                <span class="text-amber-400 text-xs">★★★★☆</span>
+                                                <span class="text-[10px] font-bold text-slate-400">(Pediatric Consultation Review)</span>
+                                            </div>
+                                            <p class="text-xs text-slate-300 leading-relaxed">
+                                                "Doctor was wonderful. The digital prescription sync was smooth. Deducted 1 star because parking space outside the clinic was busy."
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Pane 4: Lead Inbox (Hidden by default) -->
+                                <div id="pane-leads" class="hidden space-y-4">
+                                    <div class="flex items-center justify-between">
+                                        <div>
+                                            <h3 class="text-sm font-bold text-white uppercase tracking-wider">Live Local Customer Leads</h3>
+                                            <p class="text-xs text-slate-400">Direct instant inquiries matching your service radius configuration.</p>
+                                        </div>
+                                        <span class="text-[10px] bg-emerald-950 text-brand-emerald border border-brand-emerald/30 px-2 py-0.5 rounded-full font-bold">LIVE MATCHING ENABLED</span>
+                                    </div>
+
+                                    <!-- Leads List -->
+                                    <div class="space-y-2.5" id="leads-list-container">
+                                        <!-- Dynamic Leads added here, standard mock ones below -->
+                                        <div class="p-3.5 rounded-xl border bg-slate-950 border-slate-800 hover:border-brand-accent transition-all duration-300 space-y-2">
+                                            <div class="flex justify-between items-center text-xs">
+                                                <span class="font-bold text-slate-100 flex items-center gap-1.5">
+                                                    <span class="w-2 h-2 rounded-full bg-brand-emerald animate-pulse"></span>
+                                                    Vikram Rathore
+                                                </span>
+                                                <span class="text-[10px] font-mono text-slate-500">RADIUS: 1.8 KM</span>
+                                            </div>
+                                            <div class="flex items-center justify-between">
+                                                <p class="text-xs text-slate-300">"Looking to book a home sample collection for 4 senior citizens."</p>
+                                                <span class="text-[10px] font-semibold bg-indigo-950 text-indigo-400 px-2 py-0.5 rounded border border-indigo-900/30">Immediate</span>
+                                            </div>
+                                            <div class="flex justify-between items-center pt-2 border-t border-slate-900">
+                                                <span class="text-[9px] text-slate-500 font-mono">ENQUIRY #MY-2849</span>
+                                                <button onclick="acceptLead('Vikram Rathore')" class="px-2.5 py-1 bg-brand-accent hover:opacity-90 text-white rounded text-[10px] font-bold transition-all">Accept & Unlock Contact</button>
+                                            </div>
+                                        </div>
+
+                                        <div class="p-3.5 rounded-xl border bg-slate-950 border-slate-800 hover:border-brand-accent transition-all duration-300 space-y-2">
+                                            <div class="flex justify-between items-center text-xs">
+                                                <span class="font-bold text-slate-100 flex items-center gap-1.5">
+                                                    <span class="w-2 h-2 rounded-full bg-amber-500 animate-pulse"></span>
+                                                    Nisha Patel
+                                                </span>
+                                                <span class="text-[10px] font-mono text-slate-500">RADIUS: 3.4 KM</span>
+                                            </div>
+                                            <div class="flex items-center justify-between">
+                                                <p class="text-xs text-slate-300">"Need urgent booking for Dr. Verma consultation for high fever pediatric care."</p>
+                                                <span class="text-[10px] font-semibold bg-amber-950 text-amber-400 px-2 py-0.5 rounded border border-amber-900/30">Next 4 Hours</span>
+                                            </div>
+                                            <div class="flex justify-between items-center pt-2 border-t border-slate-900">
+                                                <span class="text-[9px] text-slate-500 font-mono">ENQUIRY #MY-2848</span>
+                                                <button onclick="acceptLead('Nisha Patel')" class="px-2.5 py-1 bg-brand-accent hover:opacity-90 text-white rounded text-[10px] font-bold transition-all">Accept & Unlock Contact</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Lower Interactive Action Bar inside UI -->
+                                <div class="bg-slate-950 p-3 rounded-lg border border-slate-800 flex items-center justify-between text-xs">
+                                    <span class="text-slate-400 font-medium">Auto-sync with Google Maps & India ONDC Hub:</span>
+                                    <span class="text-brand-emerald font-bold tracking-wider animate-pulse uppercase">Synced & Indexed</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- 2. The Visionary Mission:オペレーティングシステム -->
+        <section id="vision" class="border-t border-slate-900 bg-slate-950/50 py-24 relative overflow-hidden">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 space-y-16">
+                
+                <div class="text-center max-w-3xl mx-auto space-y-4">
+                    <h2 class="text-[11px] font-bold tracking-widest text-brand-emerald uppercase">Operating System of Local Commerce</h2>
+                    <p class="text-3xl sm:text-4xl font-extrabold text-white tracking-tight">
+                        Why Legacy Directories Failed & How Martyard Wins the Sovereign Infrastructure
+                    </p>
+                    <p class="text-slate-400 text-sm">
+                        Traditional local directories operate as aggressive advertising brokerage portals. Martyard establishes verified business identity infrastructure, ensuring zero-commission transaction linkages, security authentication, and structured system databases.
+                    </p>
+                </div>
+
+                <!-- Structured Cards Grid -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <!-- Card 1 -->
+                    <div class="bg-slate-900/60 border border-slate-800/80 rounded-2xl p-8 space-y-4 hover:border-slate-700 transition-all">
+                        <div class="w-12 h-12 rounded-xl bg-indigo-950/80 border border-brand-indigo/30 flex items-center justify-center text-brand-indigo font-bold text-lg">
+                            01
+                        </div>
+                        <h3 class="text-lg font-bold text-white">Trust Infrastructure</h3>
+                        <p class="text-slate-400 text-xs leading-relaxed">
+                            Every single local business registered on Martyard is mapped, vetted, and authorized using deep government registry integration APIs (GSTIN, Corporate Affairs, FSSAI). Trust is cryptographically certified.
+                        </p>
+                    </div>
+
+                    <!-- Card 2 -->
+                    <div class="bg-slate-900/60 border border-slate-800/80 rounded-2xl p-8 space-y-4 hover:border-slate-700 transition-all">
+                        <div class="w-12 h-12 rounded-xl bg-emerald-950/80 border border-brand-emerald/30 flex items-center justify-center text-brand-emerald font-bold text-lg">
+                            02
+                        </div>
+                        <h3 class="text-lg font-bold text-white">ONDC Sovereign Gateway</h3>
+                        <p class="text-slate-400 text-xs leading-relaxed">
+                            No proprietary locked-in storefronts. Every catalog created on Martyard is instantly propagated to India's Open Network for Digital Commerce (ONDC), making inventory immediately discoverable across top search apps.
+                        </p>
+                    </div>
+
+                    <!-- Card 3 -->
+                    <div class="bg-slate-900/60 border border-slate-800/80 rounded-2xl p-8 space-y-4 hover:border-slate-700 transition-all">
+                        <div class="w-12 h-12 rounded-xl bg-blue-950/80 border border-brand-accent/30 flex items-center justify-center text-brand-accent font-bold text-lg">
+                            03
+                        </div>
+                        <h3 class="text-lg font-bold text-white">Predictive AI Local Routing</h3>
+                        <p class="text-slate-400 text-xs leading-relaxed">
+                            We discard primitive directory listings for semantic lead routing. Our system dynamically scores intent profiles, linking users looking for urgent items straight with verified neighborhood sellers in microseconds.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 3. GSTIN Secure Registry Simulator -->
+        <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24">
+            <div class="bg-slate-900 border border-slate-800 rounded-3xl p-8 lg:p-12 relative overflow-hidden">
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+                    
+                    <!-- Left: Description -->
+                    <div class="lg:col-span-5 space-y-6">
+                        <div class="inline-flex items-center space-x-2 bg-emerald-950 text-brand-emerald px-3 py-1 rounded-full text-xs font-semibold">
+                            <span>Sovereign Identity Protection API</span>
+                        </div>
+                        <h2 class="text-2xl sm:text-3xl font-extrabold text-white">
+                            Zero Fraud. Deep Government Registry Verifications.
+                        </h2>
+                        <p class="text-slate-400 text-xs leading-relaxed">
+                            In India, legacy business listings are corrupted by fake locations, identity theft, and duplicate profiles. Martyard eliminates this by running an interactive government identity authentication workflow for every business onboarding.
+                        </p>
+                        <div class="space-y-3">
+                            <div class="flex items-start gap-2.5">
+                                <span class="w-5 h-5 rounded-full bg-slate-800 flex items-center justify-center text-[10px] text-brand-emerald font-bold">✓</span>
+                                <p class="text-xs text-slate-300">Automatic GSTIN / Corporate Registry Verification API</p>
+                            </div>
+                            <div class="flex items-start gap-2.5">
+                                <span class="w-5 h-5 rounded-full bg-slate-800 flex items-center justify-center text-[10px] text-brand-emerald font-bold">✓</span>
+                                <p class="text-xs text-slate-300">Geo-fenced verification matching coordinates to trade licenses</p>
+                            </div>
+                            <div class="flex items-start gap-2.5">
+                                <span class="w-5 h-5 rounded-full bg-slate-800 flex items-center justify-center text-[10px] text-brand-emerald font-bold">✓</span>
+                                <p class="text-xs text-slate-300">Instant Cryptographic trust QR code generated on ledger</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Right: Interactive Live Simulation Widget -->
+                    <div class="lg:col-span-7 bg-slate-950 rounded-2xl p-6 border border-slate-800 space-y-6 relative">
+                        <h3 class="text-xs font-bold text-slate-300 uppercase tracking-wider flex items-center justify-between">
+                            <span>Registry Authentication Simulator</span>
+                            <span class="w-2.5 h-2.5 rounded-full bg-brand-emerald animate-pulse"></span>
+                        </h3>
+
+                        <!-- Step 1 Layout -->
+                        <div class="space-y-4" id="verification-step-1">
+                            <label class="block text-xs text-slate-400 font-semibold uppercase">Select Sample Indian Corporate Identity to Onboard:</label>
+                            <div class="grid grid-cols-2 gap-3">
+                                <button onclick="selectGstin('27AAACR1409C2ZN', 'Royal Sweets & Confectioners')" class="p-3 text-left bg-slate-900 border border-slate-800 hover:border-brand-accent rounded-xl text-xs space-y-1 transition-all">
+                                    <span class="font-bold text-white block">Royal Sweets & Confectioners</span>
+                                    <span class="font-mono text-slate-500">GSTIN: 27AAACR1409C2ZN</span>
+                                </button>
+                                <button onclick="selectGstin('07AAACP5012B1ZX', 'Prestige Dental Clinic')" class="p-3 text-left bg-slate-900 border border-slate-800 hover:border-brand-accent rounded-xl text-xs space-y-1 transition-all">
+                                    <span class="font-bold text-white block">Prestige Dental Clinic</span>
+                                    <span class="font-mono text-slate-500">GSTIN: 07AAACP5012B1ZX</span>
+                                </button>
+                            </div>
+
+                            <div class="relative">
+                                <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
+                                    <span class="text-xs font-bold text-slate-500 uppercase tracking-widest">GSTIN</span>
+                                </div>
+                                <input type="text" id="simulated-gstin-input" placeholder="Or enter 15-digit custom GSTIN..." class="w-full pl-20 pr-4 py-3 bg-slate-900 border border-slate-800 text-slate-200 placeholder-slate-600 rounded-xl text-xs focus:border-brand-accent focus:outline-none transition-all">
+                            </div>
+
+                            <button onclick="startVerificationFlow()" class="w-full py-3.5 bg-gradient-to-r from-brand-accent to-brand-emerald text-white rounded-xl text-xs font-bold uppercase tracking-wider hover:opacity-95 transition-all">
+                                Initialize Secure Authentication Verify
+                            </button>
+                        </div>
+
+                        <!-- Step 2 Verification Loader (Hidden by default) -->
+                        <div class="hidden space-y-6 text-center py-6" id="verification-step-2">
+                            <div class="relative w-16 h-16 mx-auto">
+                                <div class="animate-spin rounded-full h-16 w-16 border-t-2 border-b-2 border-brand-accent"></div>
+                                <div class="absolute inset-0 flex items-center justify-center font-bold text-xs text-brand-accent">90%</div>
+                            </div>
+                            <div class="space-y-1 max-w-xs mx-auto">
+                                <p class="text-xs font-bold text-white" id="verifying-status-label">Contacting GSTN Central Servers...</p>
+                                <p class="text-[10px] text-slate-500">Validating legal name matching trade registration records.</p>
+                            </div>
+                            <div class="bg-slate-900 p-3 rounded-lg border border-slate-800 max-w-sm mx-auto text-left space-y-1">
+                                <p class="text-[9px] text-slate-500">ENCRYPTED SHIELDS SECURE PASS</p>
+                                <div class="flex justify-between font-mono text-[10px]">
+                                    <span class="text-slate-400">Target Legal Entity:</span>
+                                    <span class="text-white font-bold" id="simulated-entity-name">Royal Sweets</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Step 3 Verification Success Screen (Hidden by default) -->
+                        <div class="hidden space-y-6 text-center py-4" id="verification-step-3">
+                            <div class="w-12 h-12 bg-emerald-950 text-brand-emerald border border-brand-emerald rounded-full flex items-center justify-center text-lg mx-auto">
+                                ✓
+                            </div>
+                            <div class="space-y-1">
+                                <p class="text-sm font-extrabold text-white">Trust Credentials Successfully Issued</p>
+                                <p class="text-xs text-slate-400">Published to Martyard Decentralized Trust Ledger Network</p>
+                            </div>
+
+                            <!-- Trust Badge Visualization -->
+                            <div class="bg-slate-900 p-4 rounded-xl border border-brand-emerald/30 max-w-md mx-auto flex items-center justify-between text-left">
+                                <div class="space-y-2">
+                                    <p class="text-[9px] bg-brand-emerald/10 text-brand-emerald border border-brand-emerald/20 px-2 py-0.5 rounded-full inline-block font-bold uppercase tracking-wider">VERIFIED MARTYARD SELLER</p>
+                                    <div>
+                                        <h4 class="text-xs font-bold text-white" id="success-entity-title">Royal Sweets & Confectioners</h4>
+                                        <p class="text-[9px] text-slate-500 font-mono" id="success-entity-gstin">GSTIN: 27AAACR1409C2ZN</p>
+                                    </div>
+                                    <p class="text-[9px] text-slate-400">Sync: <span class="text-brand-emerald">Google, ONDC, Martyard Search Engine</span></p>
+                                </div>
+                                <div class="w-16 h-16 bg-white p-1 rounded-lg flex items-center justify-center shadow-lg shadow-brand-emerald/10">
+                                    <!-- Dynamic Simple Mock QR SVG -->
+                                    <svg viewBox="0 0 100 100" class="w-full h-full text-black" fill="currentColor">
+                                        <path d="M10,10 h30 v30 h-30 z M20,20 h10 v10 h-10 z M60,10 h30 v30 h-30 z M70,20 h10 v10 h-10 z M10,60 h30 v30 h-30 z M20,70 h10 v10 h-10 z M60,60 h10 v10 h-10 z M80,60 h10 v30 h-30 z" />
+                                        <rect x="45" y="45" width="10" height="10" />
+                                        <rect x="10" y="45" width="10" height="10" />
+                                        <rect x="45" y="10" width="10" height="10" />
+                                    </svg>
+                                </div>
+                            </div>
+
+                            <button onclick="resetVerificationFlow()" class="px-4 py-2 bg-slate-900 border border-slate-800 text-slate-400 hover:text-white rounded-lg text-xs font-bold hover:bg-slate-800 transition-all">
+                                Try Another Sample
+                            </button>
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- 4. Investor Section & Interactive TAM Dynamic Projection Engine -->
+        <section id="investor-deck" class="border-t border-slate-900 bg-slate-950 py-24 relative overflow-hidden">
+            <div class="absolute inset-0 bg-glow-radial opacity-50 z-0"></div>
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 space-y-16">
+                
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+                    
+                    <!-- Left: Macro Metrics Story -->
+                    <div class="lg:col-span-5 space-y-8">
+                        <div class="inline-flex items-center space-x-2 bg-blue-950 text-brand-accent px-3 py-1 rounded-full text-xs font-semibold">
+                            <span>SME Market Size TAM Calculator</span>
+                        </div>
+                        <h2 class="text-3xl sm:text-4xl font-extrabold text-white tracking-tight leading-tight">
+                            Unlock India's Sovereign <span class="bg-gradient-to-r from-brand-accent to-emerald-400 bg-clip-text text-transparent">SME Commerce Multiplier</span>
+                        </h2>
+                        <p class="text-slate-400 text-xs leading-relaxed">
+                            India is experiencing a historic surge in localized commerce. Enabled by unified national layers such as UPI, ONDC, and GST, local digital infrastructure is shifting from traditional physical directories towards full transactional-grade SaaS capabilities.
+                        </p>
+
+                        <!-- Market stats row -->
+                        <div class="grid grid-cols-2 gap-4">
+                            <div class="bg-slate-900 p-4 rounded-xl border border-slate-800">
+                                <span class="text-xs text-slate-400 block font-medium">National GDP SMEs</span>
+                                <span class="text-xl font-bold text-white block mt-1">30% Share</span>
+                            </div>
+                            <div class="bg-slate-900 p-4 rounded-xl border border-slate-800">
+                                <span class="text-xs text-slate-400 block font-medium">Digital Merchant Growth</span>
+                                <span class="text-xl font-bold text-brand-emerald block mt-1">3.4x CAGR</span>
+                            </div>
+                        </div>
+
+                        <!-- Unique Technology Moat Bullet Points -->
+                        <div class="space-y-3">
+                            <h4 class="text-xs font-bold text-slate-300 uppercase tracking-widest">Sovereign Moat Mechanics</h4>
+                            <ul class="space-y-2 text-xs text-slate-400">
+                                <li class="flex items-center gap-2">
+                                    <span class="w-1.5 h-1.5 rounded-full bg-brand-emerald"></span> Proprietary ONDC automated schema mapping.
+                                </li>
+                                <li class="flex items-center gap-2">
+                                    <span class="w-1.5 h-1.5 rounded-full bg-brand-emerald"></span> Verified identity credentials registry.
+                                </li>
+                                <li class="flex items-center gap-2">
+                                    <span class="w-1.5 h-1.5 rounded-full bg-brand-emerald"></span> Low-friction vernacular interface support.
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <!-- Right: TAM Projection Engine Simulator -->
+                    <div class="lg:col-span-7 bg-slate-900 border border-slate-800 rounded-3xl p-6 lg:p-8 space-y-8">
+                        <div>
+                            <h3 class="text-base font-bold text-white">Dynamic ARR Model</h3>
+                            <p class="text-xs text-slate-400">Slide adoption metrics to calculate addressable revenue based on average monthly merchant pricing models.</p>
+                        </div>
+
+                        <!-- Interactive Slider -->
+                        <div class="space-y-4">
+                            <div class="flex justify-between items-center text-xs">
+                                <span class="font-bold text-slate-300">Indian Business Adoption Scale (%)</span>
+                                <span id="adoption-percentage-label" class="text-sm font-extrabold text-brand-accent bg-blue-950 px-2.5 py-1 rounded border border-blue-900/30">1.5%</span>
+                            </div>
+                            <input type="range" id="adoption-slider" min="0.5" max="10.0" step="0.5" value="1.5" oninput="calculateProjection()" class="w-full h-2 bg-slate-950 rounded-lg appearance-none cursor-pointer accent-brand-accent">
+                            <div class="flex justify-between text-[10px] text-slate-500 font-mono">
+                                <span>Min: 0.5% (Early Scale)</span>
+                                <span>Max: 10.0% (Enterprise Penetration)</span>
+                            </div>
+                        </div>
+
+                        <!-- Output Visualization Dashboard -->
+                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-4 border-t border-slate-800/80">
+                            <!-- Metric Output 1 -->
+                            <div class="bg-slate-950 p-4 rounded-xl border border-slate-800">
+                                <span class="text-[9px] text-slate-500 font-bold uppercase tracking-wider block">Acquired Indian Merchants</span>
+                                <span id="calc-merchants" class="text-lg font-extrabold text-white block mt-1">945,000</span>
+                                <p class="text-[9px] text-slate-400">Total verified on network</p>
+                            </div>
+                            <!-- Metric Output 2 -->
+                            <div class="bg-slate-950 p-4 rounded-xl border border-slate-800">
+                                <span class="text-[9px] text-slate-500 font-bold uppercase tracking-wider block">Est. SaaS Revenue per month</span>
+                                <span id="calc-monthly" class="text-lg font-extrabold text-brand-emerald block mt-1">₹472.5M</span>
+                                <p class="text-[9px] text-slate-400">At Avg. Subscription Model</p>
+                            </div>
+                            <!-- Metric Output 3 -->
+                            <div class="bg-slate-950 p-4 rounded-xl border border-slate-800">
+                                <span class="text-[9px] text-slate-500 font-bold uppercase tracking-wider block">Annualized Recurring Revenue</span>
+                                <span id="calc-annual" class="text-lg font-extrabold text-brand-accent block mt-1">₹5.67B</span>
+                                <p class="text-[9px] text-slate-400">Sustainable revenue runway</p>
+                            </div>
+                        </div>
+
+                        <!-- Graph representation -->
+                        <div class="bg-slate-950 p-4 rounded-xl border border-slate-800 space-y-2">
+                            <span class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Revenue Projections Curve (Indexed in INR ₹)</span>
+                            <div class="h-6 bg-slate-900 rounded overflow-hidden flex">
+                                <div id="calc-progress-bar" class="bg-gradient-to-r from-brand-accent to-brand-emerald transition-all duration-300" style="width: 15%"></div>
+                            </div>
+                            <div class="flex justify-between text-[9px] text-slate-500 font-mono">
+                                <span>Zero Baseline</span>
+                                <span>Platform Limit Target (INR ₹20B+)</span>
+                            </div>
+                        </div>
+
+                        <!-- Footnote Note -->
+                        <p class="text-[10px] text-slate-500 italic">
+                            *This calculator displays conservative modeling based on ₹500 average monthly workspace licensing fees, ignoring added transactional processing commissions from verified merchant gateways.
+                        </p>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- 5. Competitive Advantage Matrix -->
+        <section id="competition" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 space-y-12">
+            <div class="text-center max-w-2xl mx-auto space-y-4">
+                <h2 class="text-[11px] font-bold tracking-widest text-brand-emerald uppercase">Competitive Positioning Architecture</h2>
+                <p class="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">How Martyard Outclasses Legacy Competitors</p>
+                <p class="text-slate-400 text-xs">Directories sell traffic and ad clicks. Martyard provides secure business operations, transactional connectivity, and official registry verified trust certifications.</p>
+            </div>
+
+            <!-- Competitive Comparison Matrix Grid Table -->
+            <div class="overflow-x-auto">
+                <table class="w-full text-left text-xs border-collapse min-w-[700px]">
+                    <thead>
+                        <tr class="border-b border-slate-800 text-slate-400 uppercase tracking-wider text-[10px] font-bold">
+                            <th class="py-4 px-6">Product Capabilities</th>
+                            <th class="py-4 px-6 text-brand-accent bg-blue-950/20 font-extrabold">Martyard OS</th>
+                            <th class="py-4 px-6">Google Business</th>
+                            <th class="py-4 px-6">Justdial</th>
+                            <th class="py-4 px-6">IndiaMART</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-slate-850">
+                        <tr class="hover:bg-slate-900/50 transition-colors">
+                            <td class="py-4 px-6 font-semibold text-slate-200">Official Government Registry (GSTIN/MCA) Verification</td>
+                            <td class="py-4 px-6 text-brand-emerald font-bold bg-blue-950/10">✓ Automated API Check</td>
+                            <td class="py-4 px-6 text-slate-500">✗ Self-Reported</td>
+                            <td class="py-4 px-6 text-slate-500">✗ None / Pay to Play</td>
+                            <td class="py-4 px-6 text-slate-500">✗ Document Upload</td>
+                        </tr>
+                        <tr class="hover:bg-slate-900/50 transition-colors">
+                            <td class="py-4 px-6 font-semibold text-slate-200">ONDC Protocol Integration & Catalog Sync</td>
+                            <td class="py-4 px-6 text-brand-emerald font-bold bg-blue-950/10">✓ Immediate Native Sync</td>
+                            <td class="py-4 px-6 text-slate-500">✗ Locked Inside Google</td>
+                            <td class="py-4 px-6 text-slate-500">✗ No integration</td>
+                            <td class="py-4 px-6 text-slate-500">✗ Locked Storefront</td>
+                        </tr>
+                        <tr class="hover:bg-slate-900/50 transition-colors">
+                            <td class="py-4 px-6 font-semibold text-slate-200">Zero Commission Payment Gateways</td>
+                            <td class="py-4 px-6 text-brand-emerald font-bold bg-blue-950/10">✓ Integrated UPI QR</td>
+                            <td class="py-4 px-6 text-slate-400">Partial</td>
+                            <td class="py-4 px-6 text-slate-500">✗ Proprietary Links</td>
+                            <td class="py-4 px-6 text-slate-500">✗ Paid Commission Brokerage</td>
+                        </tr>
+                        <tr class="hover:bg-slate-900/50 transition-colors">
+                            <td class="py-4 px-6 font-semibold text-slate-200">Location GPS verified Reviews (SMS OTP checked)</td>
+                            <td class="py-4 px-6 text-brand-emerald font-bold bg-blue-950/10">✓ Cryptographic Security</td>
+                            <td class="py-4 px-6 text-slate-400">Fraud Susceptible</td>
+                            <td class="py-4 px-6 text-slate-500">✗ Paid Sponsorship</td>
+                            <td class="py-4 px-6 text-slate-500">✗ Anonymous Reviews</td>
+                        </tr>
+                        <tr class="hover:bg-slate-900/50 transition-colors">
+                            <td class="py-4 px-6 font-semibold text-slate-200">Direct Native Messaging & Enquiries Routing</td>
+                            <td class="py-4 px-6 text-brand-emerald font-bold bg-blue-950/10">✓ Real-time Local Push</td>
+                            <td class="py-4 px-6 text-slate-400">SMS Relay Only</td>
+                            <td class="py-4 px-6 text-slate-500">✗ Multi-sale Brokerage</td>
+                            <td class="py-4 px-6 text-slate-500">✗ Shared leads</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- 6. Real-Time Customer Lead Simulator Widget -->
+        <section id="demo-simulator" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 relative z-10">
+            <div class="bg-gradient-to-tr from-slate-900 to-brand-slate border border-slate-800 rounded-3xl p-8 lg:p-12 space-y-8 relative overflow-hidden">
+                
+                <div class="max-w-2xl mx-auto text-center space-y-4">
+                    <span class="text-xs font-bold bg-emerald-950 text-brand-emerald px-3 py-1 rounded-full uppercase">EXPERIENCE THE FLOW IN REAL-TIME</span>
+                    <h2 class="text-3xl font-extrabold text-white tracking-tight">Interactive Local Lead Simulator</h2>
+                    <p class="text-slate-400 text-xs">
+                        Use this simulation panel to post an enquiry as an Indian consumer. Once submitted, you'll see this request immediately routed in real-time to the merchant's <strong>Lead Inbox</strong> in the <a href="#product-dashboard" class="text-brand-accent underline">Hero Platform Dashboard at the top of this page!</a>
+                    </p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+                    <!-- Column 1: Choose or fill lead form -->
+                    <div class="bg-slate-950 p-6 rounded-2xl border border-slate-800 space-y-4">
+                        <h3 class="text-xs font-extrabold text-slate-300 uppercase tracking-widest">Consumer Action Board</h3>
+                        <p class="text-xs text-slate-400">Select one of these pre-configured real enquiries, or enter a custom description below:</p>
+
+                        <div class="space-y-2">
+                            <button onclick="selectLeadForm('Prestige Kitchen Solutions', 'Modular kitchen quote request for 3BHK premium apartment in Bandra.', 'Mumbai')" class="w-full p-3 text-left bg-slate-900 hover:bg-slate-800 border border-slate-800 rounded-xl text-xs flex justify-between items-center transition-all">
+                                <div>
+                                    <span class="font-bold text-white block">Prestige Kitchen Solutions</span>
+                                    <span class="text-[10px] text-slate-500">"Modular kitchen quotation, Bandra"</span>
+                                </div>
+                                <span class="text-brand-emerald text-xs font-bold">Mumbai</span>
+                            </button>
+
+                            <button onclick="selectLeadForm('Supreme Dental & Implants', 'Need immediate cost estimation for dual dental implants & ceramic capping.', 'Delhi NCR')" class="w-full p-3 text-left bg-slate-900 hover:bg-slate-800 border border-slate-800 rounded-xl text-xs flex justify-between items-center transition-all">
+                                <div>
+                                    <span class="font-bold text-white block">Supreme Dental & Implants</span>
+                                    <span class="text-[10px] text-slate-500">"Dental Implants cost estimation"</span>
+                                </div>
+                                <span class="text-brand-emerald text-xs font-bold">Delhi NCR</span>
+                            </button>
+                        </div>
+
+                        <!-- Manual Fields -->
+                        <div class="space-y-3 pt-2">
+                            <div class="grid grid-cols-2 gap-2">
+                                <div>
+                                    <label class="block text-[10px] font-bold text-slate-500 uppercase mb-1">Your Name</label>
+                                    <input type="text" id="lead-name-input" placeholder="e.g. Ramesh Kumar" class="w-full p-2.5 bg-slate-900 border border-slate-800 rounded-lg text-xs text-white focus:outline-none focus:border-brand-accent">
+                                </div>
+                                <div>
+                                    <label class="block text-[10px] font-bold text-slate-500 uppercase mb-1">Your Location</label>
+                                    <input type="text" id="lead-loc-input" placeholder="e.g. Pune, Maharashtra" class="w-full p-2.5 bg-slate-900 border border-slate-800 rounded-lg text-xs text-white focus:outline-none focus:border-brand-accent">
+                                </div>
+                            </div>
+                            <div>
+                                <label class="block text-[10px] font-bold text-slate-500 uppercase mb-1">Detailed Inquiry Specification</label>
+                                <textarea id="lead-text-input" rows="3" placeholder="Specify exactly what service or product you require..." class="w-full p-2.5 bg-slate-900 border border-slate-800 rounded-lg text-xs text-white focus:outline-none focus:border-brand-accent resize-none"></textarea>
+                            </div>
+                        </div>
+
+                        <button onclick="submitSimulatedLead()" class="w-full py-3.5 bg-brand-emerald hover:opacity-95 text-slate-950 font-extrabold rounded-xl text-xs uppercase tracking-wider transition-all">
+                            Transmit Lead to Merchant Dashboard
+                        </button>
+                    </div>
+
+                    <!-- Column 2: Simulated Live Logs -->
+                    <div class="bg-slate-950 p-6 rounded-2xl border border-slate-800 flex flex-col justify-between">
+                        <div class="space-y-4">
+                            <h3 class="text-xs font-extrabold text-slate-300 uppercase tracking-widest flex items-center justify-between">
+                                <span>Global Event Logging Console</span>
+                                <span class="flex h-2 w-2 relative">
+                                    <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-brand-emerald opacity-75"></span>
+                                    <span class="relative inline-flex rounded-full h-2 w-2 bg-brand-emerald"></span>
+                                </span>
+                            </h3>
+
+                            <div class="space-y-2 bg-slate-900 p-4 rounded-xl border border-slate-800 font-mono text-[10px] text-slate-400 h-56 overflow-y-auto" id="logging-console">
+                                <p class="text-slate-500">// Initialize log stream...</p>
+                                <p class="text-brand-emerald">[SYSTEM] Connected securely to Martyard gateway servers.</p>
+                                <p class="text-slate-400">[LISTENER] Listening for active consumer queries...</p>
+                            </div>
+                        </div>
+
+                        <!-- Visual cue -->
+                        <div class="pt-4 border-t border-slate-900 text-xs text-slate-400 text-center flex items-center justify-center gap-2">
+                            <span class="w-2.5 h-2.5 text-brand-emerald">
+                                <svg fill="currentColor" viewBox="0 0 20 20"><path d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"></path></svg>
+                            </span>
+                            <span>Direct transmission bypasses standard directory spam filters.</span>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+        </section>
+
+        <!-- 7. Platform Infrastructure Modules Showcase -->
+        <section id="modules" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 space-y-16">
+            <div class="text-center max-w-2xl mx-auto space-y-4">
+                <h2 class="text-[11px] font-bold tracking-widest text-brand-emerald uppercase">Infrastructure Capabilities</h2>
+                <p class="text-3xl font-extrabold text-white tracking-tight">Enterprise Infrastructure Modules</p>
+                <p class="text-slate-400 text-xs">Everything an Indian business needs to streamline their physical enterprise onto decentralized networks, built to load under 300ms on basic 4G mobile links.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                <!-- Module Card -->
+                <div class="bg-slate-900/40 border border-slate-800/80 rounded-2xl p-6 hover:border-slate-700 hover:bg-slate-900/60 transition-all space-y-3">
+                    <span class="w-8 h-8 rounded-lg bg-indigo-950 text-brand-indigo flex items-center justify-center font-bold text-xs">01</span>
+                    <h3 class="text-sm font-bold text-slate-100 uppercase tracking-wide">Structured Directory</h3>
+                    <p class="text-slate-400 text-xs">Dynamic, SEO-optimized business profile index with localized search tags.</p>
+                </div>
+                <!-- Module Card -->
+                <div class="bg-slate-900/40 border border-slate-800/80 rounded-2xl p-6 hover:border-slate-700 hover:bg-slate-900/60 transition-all space-y-3">
+                    <span class="w-8 h-8 rounded-lg bg-emerald-950 text-brand-emerald flex items-center justify-center font-bold text-xs">02</span>
+                    <h3 class="text-sm font-bold text-slate-100 uppercase tracking-wide">Instant Checkout QR</h3>
+                    <p class="text-slate-400 text-xs">Secure digital payment collections integrating merchant bank accounts with zero transaction fee UPI routing.</p>
+                </div>
+                <!-- Module Card -->
+                <div class="bg-slate-900/40 border border-slate-800/80 rounded-2xl p-6 hover:border-slate-700 hover:bg-slate-900/60 transition-all space-y-3">
+                    <span class="w-8 h-8 rounded-lg bg-blue-950 text-brand-accent flex items-center justify-center font-bold text-xs">03</span>
+                    <h3 class="text-sm font-bold text-slate-100 uppercase tracking-wide">GSTIN Security Protocol</h3>
+                    <p class="text-slate-400 text-xs">Direct API connections with Government Tax databases validating valid trading compliance certificates.</p>
+                </div>
+                <!-- Module Card -->
+                <div class="bg-slate-900/40 border border-slate-800/80 rounded-2xl p-6 hover:border-slate-700 hover:bg-slate-900/60 transition-all space-y-3">
+                    <span class="w-8 h-8 rounded-lg bg-amber-950 text-amber-500 flex items-center justify-center font-bold text-xs">04</span>
+                    <h3 class="text-sm font-bold text-slate-100 uppercase tracking-wide">AI Map Localization</h3>
+                    <p class="text-slate-400 text-xs">Dynamic tracking of local radius, driving real organic footfalls into offline brick-and-mortar locations.</p>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Global Footer -->
+    <footer class="border-t border-slate-900 bg-slate-950 py-16 relative z-10 text-xs text-slate-500">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
+            
+            <div class="grid grid-cols-1 md:grid-cols-12 gap-8 items-start">
+                
+                <!-- Left brand block -->
+                <div class="md:col-span-4 space-y-4">
+                    <div class="flex items-center space-x-3">
+                        <div class="w-8 h-8 bg-gradient-to-tr from-brand-accent to-brand-emerald rounded-lg flex items-center justify-center font-extrabold text-white text-base">
+                            M
+                        </div>
+                        <span class="text-base font-bold text-white tracking-tight">Martyard</span>
+                    </div>
+                    <p class="text-slate-400 max-w-sm">
+                        Building the modern sovereign digital commerce operating system for India's 63 million small and medium enterprises. Registered compliant identity networks.
+                    </p>
+                </div>
+
+                <!-- Right navigational links -->
+                <div class="md:col-span-8 grid grid-cols-2 sm:grid-cols-4 gap-8">
+                    <div class="space-y-3">
+                        <p class="text-slate-200 font-bold uppercase tracking-wider text-[10px]">Infrastructure</p>
+                        <ul class="space-y-1.5">
+                            <li><a href="#product-dashboard" class="hover:text-slate-300">Catalog Engine</a></li>
+                            <li><a href="#vision" class="hover:text-slate-300">ONDC Integration</a></li>
+                            <li><a href="#modules" class="hover:text-slate-300">Secure Identity API</a></li>
+                            <li><a href="#competition" class="hover:text-slate-300">UPI Payments Gate</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="space-y-3">
+                        <p class="text-slate-200 font-bold uppercase tracking-wider text-[10px]">Investor Relations</p>
+                        <ul class="space-y-1.5">
+                            <li><a href="#investor-deck" class="hover:text-slate-300">Dynamic TAM Model</a></li>
+                            <li><a href="#vision" class="hover:text-slate-300">Why India SME Now</a></li>
+                            <li><a href="#competition" class="hover:text-slate-300">Competitive Moats</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="space-y-3">
+                        <p class="text-slate-200 font-bold uppercase tracking-wider text-[10px]">Enterprise Compliance</p>
+                        <ul class="space-y-1.5">
+                            <li><a href="#modules" class="hover:text-slate-300">Data Sovereignty</a></li>
+                            <li><a href="#modules" class="hover:text-slate-300">GSTIN API Integrations</a></li>
+                            <li><a href="#modules" class="hover:text-slate-300">Public Service Ledgers</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="space-y-3">
+                        <p class="text-slate-200 font-bold uppercase tracking-wider text-[10px]">HQ Location</p>
+                        <p class="text-slate-400">
+                            Bengaluru Tech Corridor,<br>
+                            Karnataka, India
+                        </p>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Bottom Disclaimer/Sovereign Badge -->
+            <div class="pt-8 border-t border-slate-900 flex flex-col sm:flex-row items-center justify-between gap-4">
+                <p>© 2026 Martyard Digital Infrastructure Private Limited. Sovereign operating platforms. All rights reserved.</p>
+                <div class="flex items-center space-x-2">
+                    <span class="w-2.5 h-2.5 rounded-full bg-emerald-500"></span>
+                    <span class="font-bold tracking-widest text-[10px] text-slate-300 uppercase">Make in India Compliant</span>
+                </div>
+            </div>
+
+        </div>
+    </footer>
+
+    <!-- Interactive JS Functionality Core -->
+    <script>
+        // Tab switching controller for Hero Section Workspace
+        function switchTab(activeTabId) {
+            // Get all tab buttons
+            const tabs = ['overview', 'catalog', 'reviews', 'leads'];
+            
+            tabs.forEach(tab => {
+                const btn = document.getElementById('tab-' + tab);
+                const pane = document.getElementById('pane-' + tab);
+                
+                if (tab === activeTabId) {
+                    // Make active styling
+                    btn.className = "w-full flex items-center space-x-2.5 px-3 py-2.5 rounded-lg text-xs font-medium bg-slate-900 border-l-2 border-brand-accent text-white transition-all text-left";
+                    // Show target pane
+                    pane.classList.remove('hidden');
+                } else {
+                    // Restore inactive styling
+                    btn.className = "w-full flex items-center space-x-2.5 px-3 py-2.5 rounded-lg text-xs font-medium text-slate-400 hover:bg-slate-900 transition-all text-left";
+                    // Hide other panes
+                    pane.classList.add('hidden');
+                }
+            });
+        }
+
+        // Add dummy customized catalog item as interactive demonstration
+        function addNewCatalogItem() {
+            const container = document.getElementById('catalog-items-container');
+            const newItem = document.createElement('div');
+            newItem.className = "bg-slate-950 p-3 rounded-lg border border-brand-emerald/40 flex items-center justify-between animate-fade-in";
+            newItem.innerHTML = `
+                <div class="flex items-center space-x-3">
+                    <span class="w-8 h-8 rounded-lg bg-emerald-950 text-brand-emerald flex items-center justify-center text-xs font-bold border border-brand-emerald/30">CUSTOM</span>
+                    <div>
+                        <p class="text-xs font-bold text-slate-100">Specialized Diagnostic Review</p>
+                        <p class="text-[10px] text-slate-400">Newly added by merchant via onboard API panel</p>
+                    </div>
+                </div>
+                <div class="text-right">
+                    <p class="text-xs font-bold text-brand-emerald">₹1,200</p>
+                    <span class="text-[9px] bg-emerald-950 text-brand-emerald px-1.5 py-0.5 rounded font-semibold">Active ONDC</span>
+                </div>
+            `;
+            container.prepend(newItem);
+            triggerToast("Successfully synchronized new custom service with nationwide ONDC repository.");
+        }
+
+        // Simple Lead simulator logic cross-component reactivity
+        function selectLeadForm(merchant, detailedText, location) {
+            document.getElementById('lead-name-input').value = "Aditya Sharma";
+            document.getElementById('lead-loc-input').value = location;
+            document.getElementById('lead-text-input').value = detailedText;
+            
+            // Log update to console
+            appendLog(`[SELECTION] Pre-populated lead request for ${merchant}. Ready for dispatch.`);
+        }
+
+        function submitSimulatedLead() {
+            const name = document.getElementById('lead-name-input').value.trim();
+            const loc = document.getElementById('lead-loc-input').value.trim();
+            const text = document.getElementById('lead-text-input').value.trim();
+
+            if (!name || !loc || !text) {
+                triggerToast("Validation error: Please fill all manual simulation fields.", "error");
+                appendLog("[ERROR] Failed validation checks. Name, Location & Inquiry body must exist.");
+                return;
+            }
+
+            appendLog(`[DISPATCH] Broadcasting direct local request to nearby verified merchant subnetworks...`);
+            
+            // Add custom visual timeout simulating server transaction processing speed
+            setTimeout(() => {
+                appendLog(`[GATEWAY] Matching intent filters inside 5 km coordinate radius around ${loc}...`);
+                
+                setTimeout(() => {
+                    appendLog(`[ROUTER] Direct Match Successful! Target identified: APEX DIAGNOSTICS.`);
+                    appendLog(`[SYNC] Pushed Enquiry #MY-${Math.floor(Math.random() * 9000) + 1000} to Merchant Workspace Workspace.`);
+                    
+                    // Increment the lead counter badge inside hero section
+                    const badge = document.getElementById('lead-count-badge');
+                    const curCount = parseInt(badge.textContent);
+                    badge.textContent = curCount + 1;
+
+                    // Add lead into list inside the Workspace Lead Pane in the Hero Area
+                    const leadsContainer = document.getElementById('leads-list-container');
+                    const leadItem = document.createElement('div');
+                    leadItem.className = "p-3.5 rounded-xl border bg-slate-950 border-brand-accent space-y-2 animate-fade-in";
+                    leadItem.innerHTML = `
+                        <div class="flex justify-between items-center text-xs">
+                            <span class="font-bold text-slate-100 flex items-center gap-1.5">
+                                <span class="w-2 h-2 rounded-full bg-brand-emerald animate-pulse"></span>
+                                ${name}
+                            </span>
+                            <span class="text-[10px] font-mono text-brand-accent">LIVE: SIMULATED</span>
+                        </div>
+                        <div class="flex items-center justify-between">
+                            <p class="text-xs text-slate-300">"${text}"</p>
+                            <span class="text-[10px] font-semibold bg-emerald-950 text-brand-emerald px-2 py-0.5 rounded border border-brand-emerald/30">${loc}</span>
+                        </div>
+                        <div class="flex justify-between items-center pt-2 border-t border-slate-900">
+                            <span class="text-[9px] text-slate-500 font-mono">ENQUIRY #SIM-${Math.floor(Math.random() * 900) + 100}</span>
+                            <button onclick="acceptLead('${name}')" class="px-2.5 py-1 bg-brand-emerald text-slate-950 rounded text-[10px] font-extrabold transition-all">Accept Live Match</button>
+                        </div>
+                    `;
+                    leadsContainer.prepend(leadItem);
+
+                    triggerToast("Lead dispatched successfully! Scroll back to Hero Workspace to view the new inbox item.", "success");
+                    
+                    // Prompt user to switch back to watch the change
+                    switchTab('leads');
+                }, 800);
+
+            }, 600);
+        }
+
+        // Accept a lead inside dashboard
+        function acceptLead(name) {
+            triggerToast(`Direct encrypted messaging channel created with target applicant: ${name}`);
+            appendLog(`[LEADERBOARD] Secure communications locked in with target applicant ${name}. Channel secure.`);
+        }
+
+        // TAM Dynamic Projection Engine Calculation logic
+        function calculateProjection() {
+            const slider = document.getElementById('adoption-slider');
+            const percentVal = parseFloat(slider.value);
+            
+            // Dynamic text update
+            document.getElementById('adoption-percentage-label').innerText = percentVal.toFixed(1) + "%";
+
+            // Total SMEs is conservative 63,000,000 in India
+            const totalSmes = 63000000;
+            const acquiredMerchants = Math.round((percentVal / 100) * totalSmes);
+            
+            // Average SaaS platform monthly licensing is set to conservative ₹500
+            const avgLicensePrice = 500;
+            const monthlySaaSRevenue = acquiredMerchants * avgLicensePrice;
+            const annualSaaSRevenue = monthlySaaSRevenue * 12;
+
+            // Update UI Outputs
+            document.getElementById('calc-merchants').innerText = formatIndianCurrency(acquiredMerchants);
+            document.getElementById('calc-monthly').innerText = "₹" + formatIndianRevenue(monthlySaaSRevenue);
+            document.getElementById('calc-annual').innerText = "₹" + formatIndianRevenue(annualSaaSRevenue);
+
+            // Progress Bar representing relative revenue curves up to limits (max 10% target corresponds to INR ₹37.8B ARR)
+            const ratio = (percentVal / 10.0) * 100;
+            document.getElementById('calc-progress-bar').style.width = ratio + "%";
+        }
+
+        function formatIndianCurrency(num) {
+            return num.toLocaleString('en-IN');
+        }
+
+        function formatIndianRevenue(num) {
+            if (num >= 10000000) {
+                return (num / 10000000).toFixed(2) + " Cr";
+            } else if (num >= 100000) {
+                return (num / 100000).toFixed(2) + " Lakh";
+            }
+            return num.toLocaleString('en-IN');
+        }
+
+        // Global Custom Log Console Helper
+        function appendLog(message) {
+            const consoleBox = document.getElementById('logging-console');
+            const logLine = document.createElement('p');
+            logLine.innerText = message;
+            consoleBox.appendChild(logLine);
+            consoleBox.scrollTop = consoleBox.scrollHeight;
+        }
+
+        // Trigger gorgeous customized responsive status alerts
+        function triggerToast(message, type = "info") {
+            const container = document.getElementById('toast-container');
+            const toast = document.createElement('div');
+            toast.className = "p-4 rounded-xl border bg-slate-900 shadow-xl pointer-events-auto border-slate-800 flex items-center space-x-3 text-xs font-semibold text-white animate-fade-in";
+            
+            // Set dynamic icon depending on alert type
+            let iconColor = "text-brand-accent";
+            if (type === "success") iconColor = "text-brand-emerald";
+            if (type === "error") iconColor = "text-rose-500";
+
+            toast.innerHTML = `
+                <span class="${iconColor} font-bold text-lg">●</span>
+                <span class="flex-1">${message}</span>
+            `;
+            
+            container.appendChild(toast);
+            
+            // Remove alert automatically after 4 seconds
+            setTimeout(() => {
+                toast.classList.add('opacity-0');
+                setTimeout(() => {
+                    toast.remove();
+                }, 300);
+            }, 4000);
+        }
+
+        // Prepopulate Custom GSTIN Simulation 
+        function selectGstin(gstin, legalName) {
+            document.getElementById('simulated-gstin-input').value = gstin;
+            // Preset simulated entity name
+            window.targetEntityName = legalName;
+            triggerToast(`Prepared profile matching credentials for ${legalName}. Click Verify to check trade licensing authenticity.`);
+        }
+
+        // Secure Government Verification Registry Flow
+        let verifyTimer;
+        function startVerificationFlow() {
+            const inputVal = document.getElementById('simulated-gstin-input').value.trim();
+            if (inputVal.length < 15) {
+                triggerToast("Invalid GSTIN: Indian trade registrations must match exact 15-digit alphanumeric schemas.", "error");
+                return;
+            }
+
+            // Hide step 1, show step 2 loader
+            document.getElementById('verification-step-1').classList.add('hidden');
+            document.getElementById('verification-step-2').classList.remove('hidden');
+
+            const label = document.getElementById('verifying-status-label');
+            const nameTag = document.getElementById('simulated-entity-name');
+            const targetName = window.targetEntityName || "Registered Trade Merchant";
+            
+            nameTag.innerText = targetName;
+
+            // Simple micro sequence simulation
+            setTimeout(() => {
+                label.innerText = "Accessing Corporate Affairs Registrars...";
+                setTimeout(() => {
+                    label.innerText = "Verifying GPS Trade Location matches Registered Business Address...";
+                    setTimeout(() => {
+                        // Complete & show Step 3
+                        document.getElementById('verification-step-2').classList.add('hidden');
+                        document.getElementById('verification-step-3').classList.remove('hidden');
+                        
+                        document.getElementById('success-entity-title').innerText = targetName;
+                        document.getElementById('success-entity-gstin').innerText = `GSTIN: ${inputVal}`;
+                        triggerToast("Identity authentication verified. Secure Martyard Trust badge generated.", "success");
+                    }, 1200);
+                }, 1000);
+            }, 800);
+        }
+
+        function resetVerificationFlow() {
+            document.getElementById('verification-step-3').classList.add('hidden');
+            document.getElementById('verification-step-1').classList.remove('hidden');
+            document.getElementById('simulated-gstin-input').value = "";
+            window.targetEntityName = null;
+        }
+
+        // Mobile responsive dropdown menu toggle
+        const toggleBtn = document.getElementById('mobile-menu-toggle');
+        const mobileMenu = document.getElementById('mobile-menu');
+        toggleBtn.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+        });
+
+        // Initialize calculators on page mount
+        window.onload = function() {
+            calculateProjection();
+        }
+    </script>
+</body>
+</html>

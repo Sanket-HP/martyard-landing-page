@@ -3,7 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Martyard | Digitizing India's Local Commerce</title>
+    <title>Martyard | Digital Commerce Infrastructure for Local Businesses</title>
+    
+    <!-- Google Fonts - Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
@@ -11,936 +17,953 @@
             theme: {
                 extend: {
                     colors: {
-                        slate: {
-                            950: '#030712',
-                            900: '#090d16',
-                            850: '#111724',
-                            800: '#1e293b',
-                        },
-                        accent: {
-                            indigo: '#6366f1',
-                            blue: '#3b82f6',
-                            emerald: '#10b981'
+                        brand: {
+                            blue: '#2563EB',
+                            emerald: '#10B981',
+                            dark: '#111827',
+                            muted: '#6B7280',
+                            light: '#F8FAFC',
+                            border: '#E5E7EB'
                         }
                     },
                     fontFamily: {
-                        sans: ['system-ui', '-apple-system', 'BlinkMacSystemFont', '"Segoe UI"', 'Roboto', 'sans-serif'],
+                        sans: ['Inter', 'sans-serif'],
                     }
                 }
             }
         }
     </script>
+    
+    <!-- Custom Clean Styling -->
     <style>
         /* Modern Scrollbar styling */
         ::-webkit-scrollbar {
-            width: 6px;
+            width: 8px;
         }
         ::-webkit-scrollbar-track {
-            background: #030712;
+            background: #FFFFFF;
         }
         ::-webkit-scrollbar-thumb {
-            background: #1e293b;
+            background: #E2E8F0;
             border-radius: 9999px;
         }
         ::-webkit-scrollbar-thumb:hover {
-            background: #334155;
+            background: #CBD5E1;
         }
 
-        /* Subtle mesh background grid */
-        .bg-mesh-pattern {
-            background-image: 
-                radial-gradient(at 0% 0%, rgba(59, 130, 246, 0.08) 0px, transparent 50%),
-                radial-gradient(at 100% 100%, rgba(99, 102, 241, 0.08) 0px, transparent 50%),
-                radial-gradient(rgba(255, 255, 255, 0.015) 1px, transparent 1px);
-            background-size: 100% 100%, 100% 100%, 32px 32px;
+        /* Soft ambient background radial details to replicate Stripe/Linear */
+        .ambient-glow-top {
+            background: radial-gradient(circle at 50% -20%, rgba(37, 99, 235, 0.05) 0%, transparent 60%);
+        }
+        .ambient-glow-bottom {
+            background: radial-gradient(circle at 50% 120%, rgba(16, 185, 129, 0.04) 0%, transparent 50%);
+        }
+
+        /* CSS Fade transitions for switching previews */
+        .tab-pane {
+            transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
+        }
+        .tab-pane.hidden {
+            display: none;
+            opacity: 0;
+            transform: translateY(8px);
         }
     </style>
 </head>
-<body class="bg-slate-950 text-slate-100 font-sans antialiased selection:bg-accent-blue/30 selection:text-white">
+<body class="bg-white text-brand-dark font-sans antialiased selection:bg-brand-blue/10 selection:text-brand-blue">
 
-    <!-- Ambient Glow Layout Assets -->
-    <div class="fixed inset-0 bg-mesh-pattern pointer-events-none z-0"></div>
+    <!-- Ambient glows -->
+    <div class="absolute inset-0 ambient-glow-top pointer-events-none z-0"></div>
+    <div class="absolute inset-0 ambient-glow-bottom pointer-events-none z-0"></div>
 
-    <!-- Navigation Header -->
-    <header class="sticky top-0 z-50 bg-slate-950/80 backdrop-blur-md border-b border-slate-900">
-        <div class="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
+    <!-- Main Navigation Header -->
+    <header class="sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b border-brand-border">
+        <div class="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
+            
             <!-- Brand Logo -->
-            <a href="#" class="flex items-center space-x-3 group">
-                <div class="w-9 h-9 bg-gradient-to-tr from-accent-blue via-accent-indigo to-accent-emerald rounded-lg flex items-center justify-center font-bold text-white text-lg shadow-md shadow-accent-blue/15 group-hover:scale-[1.02] transition-transform">
+            <a href="#" class="flex items-center space-x-2.5 group">
+                <div class="w-8 h-8 bg-brand-blue rounded-lg flex items-center justify-center font-bold text-white text-base shadow-sm shadow-brand-blue/20 group-hover:scale-[1.02] transition-transform">
                     M
                 </div>
-                <div>
-                    <span class="text-lg font-bold tracking-tight text-white group-hover:text-accent-blue transition-colors">Martyard</span>
-                    <span class="block text-[9px] text-slate-400 font-semibold tracking-widest uppercase">Digital Commerce</span>
+                <div class="flex flex-col">
+                    <span class="text-base font-bold tracking-tight text-brand-dark group-hover:text-brand-blue transition-colors leading-none">Martyard</span>
+                    <span class="text-[9px] text-brand-muted font-semibold tracking-wider uppercase mt-0.5">Local Commerce OS</span>
                 </div>
             </a>
 
-            <!-- Navigation Links -->
-            <nav class="hidden md:flex items-center space-x-8 text-sm font-medium text-slate-300">
-                <a href="#why" class="hover:text-white transition-colors">Why Martyard</a>
-                <a href="#how" class="hover:text-white transition-colors">How It Works</a>
-                <a href="#product" class="hover:text-white transition-colors">Product Showcase</a>
-                <a href="#market" class="hover:text-white transition-colors">Market Potential</a>
-                <a href="#revenue" class="hover:text-white transition-colors">Revenue</a>
-                <a href="#roadmap" class="hover:text-white transition-colors">Roadmap</a>
+            <!-- Desktop Nav Links -->
+            <nav class="hidden md:flex items-center space-x-8 text-sm font-medium text-brand-muted">
+                <a href="#about" class="hover:text-brand-dark transition-colors">About</a>
+                <a href="#features" class="hover:text-brand-dark transition-colors">Features</a>
+                <a href="#dashboard" class="hover:text-brand-dark transition-colors">Dashboard Preview</a>
+                <a href="#how-it-works" class="hover:text-brand-dark transition-colors">How It Works</a>
+                <a href="#industries" class="hover:text-brand-dark transition-colors">Solutions</a>
+                <a href="#pricing" class="hover:text-brand-dark transition-colors">Pricing</a>
+                <a href="#contact" class="hover:text-brand-dark transition-colors">Contact</a>
             </nav>
 
             <!-- Actions -->
-            <div class="hidden md:flex items-center space-x-4">
-                <a href="#contact" class="text-sm font-medium text-slate-300 hover:text-white transition-colors">Pitch Deck</a>
-                <a href="#contact" class="px-5 py-2.5 bg-white hover:bg-slate-100 text-slate-950 rounded-lg text-xs font-bold shadow-lg transition-all active:scale-[0.98]">
-                    Request Demo
+            <div class="hidden md:flex items-center space-x-3.5">
+                <a href="#contact" class="text-sm font-medium text-brand-muted hover:text-brand-dark transition-colors">
+                    Login
+                </a>
+                <a href="#contact" class="px-4 py-2 bg-brand-blue hover:bg-blue-700 text-white rounded-lg text-xs font-semibold shadow-sm transition-all active:scale-[0.98]">
+                    Get Started
                 </a>
             </div>
 
             <!-- Mobile Menu Toggle Button -->
-            <button id="mobile-menu-toggle" class="md:hidden p-2 text-slate-400 hover:text-white focus:outline-none" aria-label="Toggle menu">
-                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+            <button id="mobile-menu-toggle" class="md:hidden p-1.5 text-brand-muted hover:text-brand-dark focus:outline-none" aria-label="Toggle menu">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path>
+                </svg>
             </button>
         </div>
 
         <!-- Mobile Dropdown Nav Menu -->
-        <div id="mobile-menu" class="hidden md:hidden bg-slate-950 border-b border-slate-900 px-6 py-6 space-y-4 text-center">
-            <a href="#why" class="block text-slate-300 hover:text-white text-sm">Why Martyard</a>
-            <a href="#how" class="block text-slate-300 hover:text-white text-sm">How It Works</a>
-            <a href="#product" class="block text-slate-300 hover:text-white text-sm">Product Showcase</a>
-            <a href="#market" class="block text-slate-300 hover:text-white text-sm">Market Potential</a>
-            <a href="#revenue" class="block text-slate-300 hover:text-white text-sm">Revenue</a>
-            <a href="#roadmap" class="block text-slate-300 hover:text-white text-sm">Roadmap</a>
-            <div class="pt-4 border-t border-slate-900">
-                <a href="#contact" class="block w-full py-3 bg-white text-slate-950 rounded-lg text-xs font-bold">Request Demo</a>
+        <div id="mobile-menu" class="hidden md:hidden bg-white border-b border-brand-border px-6 py-6 space-y-4 text-center shadow-lg">
+            <a href="#about" class="block text-brand-muted hover:text-brand-dark text-sm py-1.5">About</a>
+            <a href="#features" class="block text-brand-muted hover:text-brand-dark text-sm py-1.5">Features</a>
+            <a href="#dashboard" class="block text-brand-muted hover:text-brand-dark text-sm py-1.5">Dashboard Preview</a>
+            <a href="#how-it-works" class="block text-brand-muted hover:text-brand-dark text-sm py-1.5">How It Works</a>
+            <a href="#industries" class="block text-brand-muted hover:text-brand-dark text-sm py-1.5">Solutions</a>
+            <a href="#pricing" class="block text-brand-muted hover:text-brand-dark text-sm py-1.5">Pricing</a>
+            <a href="#contact" class="block text-brand-muted hover:text-brand-dark text-sm py-1.5">Contact</a>
+            <div class="pt-4 border-t border-brand-border flex flex-col space-y-2">
+                <a href="#contact" class="block w-full py-2.5 text-center text-sm font-medium text-brand-dark">Login</a>
+                <a href="#contact" class="block w-full py-2.5 bg-brand-blue text-white rounded-lg text-xs font-semibold shadow-sm">Get Started</a>
             </div>
         </div>
     </header>
 
-    <!-- Main Workspace Content -->
+    <!-- Main Site Elements -->
     <main class="relative z-10">
 
-        <!-- 1. Hero Section -->
-        <section class="max-w-7xl mx-auto px-6 pt-16 pb-28 lg:pt-24 lg:pb-36">
-            <div class="grid grid-cols-1 lg:grid-cols-12 gap-16 items-center">
-                <!-- Hero Left: Strategic Copy -->
+        <!-- 2. Hero Section -->
+        <section class="max-w-7xl mx-auto px-6 pt-16 pb-20 lg:pt-24 lg:pb-32">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center">
+                
+                <!-- Hero Left: Strategic Content -->
                 <div class="lg:col-span-6 space-y-8 text-center lg:text-left">
-                    <div class="inline-flex items-center space-x-2 bg-slate-900 border border-slate-800 rounded-full px-4 py-1.5 text-xs text-accent-blue font-medium">
-                        <span class="w-2 h-2 rounded-full bg-accent-blue animate-pulse"></span>
-                        <span>Designed for India’s Hyperlocal Future</span>
+                    <div class="inline-flex items-center space-x-2 bg-brand-blue/5 border border-brand-blue/10 rounded-full px-4 py-1.5 text-xs text-brand-blue font-medium">
+                        <span class="w-1.5 h-1.5 rounded-full bg-brand-blue animate-pulse"></span>
+                        <span>Now Launching Across Maharashtra</span>
                     </div>
 
-                    <h1 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight leading-tight text-white">
-                        Digitizing Every <br class="hidden lg:block">
-                        <span class="bg-gradient-to-r from-accent-blue via-accent-indigo to-accent-emerald bg-clip-text text-transparent">Local Business</span> in India
+                    <h1 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight leading-[1.1] text-brand-dark">
+                        Empowering Local Businesses with <span class="text-brand-blue">Modern Digital Commerce</span>
                     </h1>
 
-                    <p class="text-base sm:text-lg text-slate-400 max-w-xl mx-auto lg:mx-0 leading-relaxed">
-                        Discover &bull; Order &bull; Deliver. Helping India's neighborhood enterprises create their online storefronts, receive verified customer orders directly, and coordinate local delivery services through a single elegant business application.
+                    <p class="text-base sm:text-lg text-brand-muted max-w-xl mx-auto lg:mx-0 leading-relaxed">
+                        Martyard helps businesses create their digital presence, manage products, receive customer orders, and grow through a simple, secure, and scalable platform.
                     </p>
 
                     <div class="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4">
-                        <a href="#contact" class="w-full sm:w-auto px-8 py-4 bg-white text-slate-950 hover:bg-slate-100 rounded-lg text-sm font-bold text-center transition-all shadow-xl shadow-white/5 active:scale-[0.98]">
-                            Request Pitch Deck
+                        <a href="#contact" class="w-full sm:w-auto px-8 py-4 bg-brand-blue hover:bg-blue-700 text-white rounded-xl text-sm font-semibold text-center transition-all shadow-md active:scale-[0.98]">
+                            Get Started
                         </a>
-                        <a href="#product" class="w-full sm:w-auto px-8 py-4 bg-slate-900 border border-slate-800 hover:bg-slate-800 text-slate-300 rounded-lg text-sm font-bold text-center transition-all active:scale-[0.98]">
-                            Interactive Showcase
+                        <a href="#contact" class="w-full sm:w-auto px-8 py-4 bg-white border border-brand-border hover:bg-brand-light text-brand-dark rounded-xl text-sm font-semibold text-center transition-all active:scale-[0.98]">
+                            Book Demo
                         </a>
                     </div>
+                </div>
 
-                    <div class="pt-8 border-t border-slate-900 grid grid-cols-3 gap-6 text-center lg:text-left">
-                        <div>
-                            <span class="block text-2xl font-bold text-white tracking-tight">63M+</span>
-                            <span class="text-xs text-slate-500 font-medium tracking-wider">Indian MSMEs TAM</span>
-                        </div>
-                        <div>
-                            <span class="block text-2xl font-bold text-accent-emerald tracking-tight">₹499/mo</span>
-                            <span class="text-xs text-slate-500 font-medium tracking-wider">Accessible Pricing</span>
-                        </div>
-                        <div>
-                            <span class="block text-2xl font-bold text-accent-indigo tracking-tight">Zero</span>
-                            <span class="text-xs text-slate-500 font-medium tracking-wider">Brokerage Gateways</span>
+                <!-- Hero Right: High Fidelity Real Martyard Console Representation -->
+                <div class="lg:col-span-6">
+                    <div class="relative mx-auto max-w-lg lg:max-w-none">
+                        <!-- Subtle Shadow Effect -->
+                        <div class="absolute inset-4 bg-slate-200/50 rounded-2xl blur-2xl opacity-75 pointer-events-none"></div>
+                        
+                        <!-- High Fidelity Chrome Window Mockup of Martyard App -->
+                        <div class="relative bg-white border border-brand-border rounded-xl overflow-hidden shadow-xl">
+                            <!-- Window Chrome Topbar -->
+                            <div class="bg-brand-light px-4 py-3 flex items-center justify-between border-b border-brand-border">
+                                <div class="flex items-center space-x-1.5">
+                                    <span class="w-2.5 h-2.5 rounded-full bg-slate-300"></span>
+                                    <span class="w-2.5 h-2.5 rounded-full bg-slate-300"></span>
+                                    <span class="w-2.5 h-2.5 rounded-full bg-slate-300"></span>
+                                    <span class="text-[10px] text-brand-muted font-mono tracking-wider pl-4">MARTYARD MERCHANT PORTAL</span>
+                                </div>
+                                <span class="text-[9px] font-bold text-brand-emerald bg-brand-emerald/10 border border-brand-emerald/20 px-2 py-0.5 rounded uppercase tracking-wider">Operational</span>
+                            </div>
+
+                            <!-- Mock Workspace Inner -->
+                            <div class="p-5 space-y-5 text-left">
+                                <!-- Merchant Headline -->
+                                <div class="flex items-center justify-between border-b border-brand-border pb-4">
+                                    <div>
+                                        <h4 class="text-sm font-bold text-brand-dark">Kolhapur Diagnostics Labs</h4>
+                                        <p class="text-xs text-brand-muted">Shivaji Road, Kolhapur</p>
+                                    </div>
+                                    <span class="px-2 py-0.5 bg-brand-light border border-brand-border rounded text-[10px] font-mono text-brand-muted">ID: MY-40285</span>
+                                </div>
+
+                                <!-- Key Stats Mini-Matrix -->
+                                <div class="grid grid-cols-3 gap-3">
+                                    <div class="bg-brand-light p-3 rounded-lg border border-brand-border">
+                                        <span class="text-[9px] text-brand-muted block uppercase font-medium">New Orders</span>
+                                        <span class="text-sm font-bold text-brand-dark block mt-0.5">24</span>
+                                    </div>
+                                    <div class="bg-brand-light p-3 rounded-lg border border-brand-border">
+                                        <span class="text-[9px] text-brand-muted block uppercase font-medium">Daily Sales</span>
+                                        <span class="text-sm font-bold text-brand-emerald block mt-0.5">₹18,400</span>
+                                    </div>
+                                    <div class="bg-brand-light p-3 rounded-lg border border-brand-border">
+                                        <span class="text-[9px] text-brand-muted block uppercase font-medium">Under Delivery</span>
+                                        <span class="text-sm font-bold text-brand-blue block mt-0.5">6</span>
+                                    </div>
+                                </div>
+
+                                <!-- Active Catalogue Section -->
+                                <div class="space-y-2.5">
+                                    <span class="text-[10px] font-bold uppercase tracking-wider text-brand-muted">Platform Catalog</span>
+                                    <div class="space-y-2">
+                                        <div class="bg-white p-3 rounded-lg border border-brand-border flex items-center justify-between shadow-sm">
+                                            <div class="flex items-center space-x-3">
+                                                <div class="w-7 h-7 rounded bg-brand-blue/10 flex items-center justify-center text-brand-blue font-bold text-[11px]">LAB</div>
+                                                <div>
+                                                    <p class="text-xs font-semibold text-brand-dark">Complete Metabolic Profile</p>
+                                                    <p class="text-[10px] text-brand-muted">Full profile with home collection service</p>
+                                                </div>
+                                            </div>
+                                            <span class="text-xs font-bold text-brand-dark">₹1,999</span>
+                                        </div>
+                                        <div class="bg-white p-3 rounded-lg border border-brand-border flex items-center justify-between shadow-sm">
+                                            <div class="flex items-center space-x-3">
+                                                <div class="w-7 h-7 rounded bg-brand-emerald/10 flex items-center justify-center text-brand-emerald font-bold text-[11px]">DR</div>
+                                                <div>
+                                                    <p class="text-xs font-semibold text-brand-dark">General Pediatric Consultation</p>
+                                                    <p class="text-[10px] text-brand-muted">In-clinic slot card valid for 15 days</p>
+                                                </div>
+                                            </div>
+                                            <span class="text-xs font-bold text-brand-dark">₹500</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
 
-                <!-- Hero Right: High Fidelity Visual Mockup (Platform Snapshot) -->
-                <div class="lg:col-span-6">
-                    <div class="relative mx-auto max-w-lg lg:max-w-none">
-                        <!-- Desktop Container Shadow Background -->
-                        <div class="absolute -inset-1 bg-gradient-to-tr from-accent-blue to-accent-emerald rounded-2xl blur-xl opacity-20 pointer-events-none"></div>
-                        
-                        <!-- High Fidelity Chrome Window Mockup -->
-                        <div class="relative bg-slate-900 border border-slate-800 rounded-xl overflow-hidden shadow-2xl">
-                            <!-- Window Chrome Topbar -->
-                            <div class="bg-slate-950 px-4 py-3 flex items-center justify-between border-b border-slate-850">
-                                <div class="flex items-center space-x-1.5">
-                                    <span class="w-2.5 h-2.5 rounded-full bg-slate-800"></span>
-                                    <span class="w-2.5 h-2.5 rounded-full bg-slate-800"></span>
-                                    <span class="w-2.5 h-2.5 rounded-full bg-slate-800"></span>
-                                    <span class="text-[10px] text-slate-500 font-mono tracking-wider pl-4">MARTYARD MERCHANT CENTER</span>
-                                </div>
-                                <div class="px-2 py-0.5 rounded-full bg-accent-emerald/10 border border-accent-emerald/20 flex items-center space-x-1">
-                                    <span class="w-1.5 h-1.5 rounded-full bg-accent-emerald animate-pulse"></span>
-                                    <span class="text-[9px] font-bold text-accent-emerald uppercase tracking-wider">System Live</span>
-                                </div>
-                            </div>
+            </div>
+        </section>
 
-                            <!-- Mock Workspace Inner -->
-                            <div class="p-6 space-y-6">
-                                <!-- Merchant Headline -->
-                                <div class="flex items-center justify-between">
-                                    <div>
-                                        <h4 class="text-sm font-bold text-white">Apex Diagnostics & Clinic</h4>
-                                        <p class="text-xs text-slate-400">Shivaji Road, Kolhapur, Maharashtra</p>
-                                    </div>
-                                    <span class="px-2.5 py-1 bg-slate-800 border border-slate-700 rounded text-[10px] font-mono text-slate-300">ID: MY-41602</span>
-                                </div>
-
-                                <!-- Metric Cards -->
-                                <div class="grid grid-cols-3 gap-3">
-                                    <div class="bg-slate-950 p-3 rounded-lg border border-slate-850">
-                                        <span class="text-[10px] text-slate-500 block uppercase">Today's Orders</span>
-                                        <span class="text-sm font-bold text-white block mt-0.5">18</span>
-                                    </div>
-                                    <div class="bg-slate-950 p-3 rounded-lg border border-slate-850">
-                                        <span class="text-[10px] text-slate-500 block uppercase">Revenue</span>
-                                        <span class="text-sm font-bold text-accent-emerald block mt-0.5">₹14,250</span>
-                                    </div>
-                                    <div class="bg-slate-950 p-3 rounded-lg border border-slate-850">
-                                        <span class="text-[10px] text-slate-500 block uppercase">Delivery Pending</span>
-                                        <span class="text-sm font-bold text-accent-blue block mt-0.5">4</span>
-                                    </div>
-                                </div>
-
-                                <!-- Catalog Snapshot Preview -->
-                                <div class="space-y-3">
-                                    <div class="flex justify-between items-center">
-                                        <span class="text-[11px] font-bold uppercase tracking-wider text-slate-400">Active Catalogue</span>
-                                        <span class="text-[10px] text-accent-blue hover:underline cursor-pointer">Edit Products</span>
-                                    </div>
-                                    <div class="space-y-2">
-                                        <div class="bg-slate-950 p-3 rounded-lg border border-slate-850 flex items-center justify-between">
-                                            <div class="flex items-center space-x-3">
-                                                <div class="w-8 h-8 rounded bg-accent-blue/10 border border-accent-blue/20 flex items-center justify-center text-accent-blue font-bold text-xs">MED</div>
-                                                <div>
-                                                    <p class="text-xs font-bold text-slate-200">Full Body Executive Health Panel</p>
-                                                    <p class="text-[10px] text-slate-500">72 Essential parameters with report consultation</p>
-                                                </div>
-                                            </div>
-                                            <span class="text-xs font-bold text-accent-emerald">₹2,999</span>
-                                        </div>
-                                        <div class="bg-slate-950 p-3 rounded-lg border border-slate-850 flex items-center justify-between">
-                                            <div class="flex items-center space-x-3">
-                                                <div class="w-8 h-8 rounded bg-accent-indigo/10 border border-accent-indigo/20 flex items-center justify-center text-accent-indigo font-bold text-xs">PHR</div>
-                                                <div>
-                                                    <p class="text-xs font-bold text-slate-200">General Pediatric Consultation</p>
-                                                    <p class="text-[10px] text-slate-500">In-clinic consultation card valid for 15 days</p>
-                                                </div>
-                                            </div>
-                                            <span class="text-xs font-bold text-accent-emerald">₹800</span>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <!-- Local Delivery Partner Sync Map Graphic representation -->
-                                <div class="bg-slate-950 p-4 rounded-lg border border-slate-850 space-y-2">
-                                    <div class="flex justify-between items-center text-xs">
-                                        <span class="font-bold text-slate-300">Local Delivery Network (Within Kolhapur)</span>
-                                        <span class="text-[10px] text-accent-emerald flex items-center gap-1">
-                                            <span class="w-1.5 h-1.5 rounded-full bg-accent-emerald animate-ping"></span> Swiggy Genie / Dunzo API Active
-                                        </span>
-                                    </div>
-                                    <div class="h-2 bg-slate-900 rounded overflow-hidden flex">
-                                        <div class="bg-gradient-to-r from-accent-blue to-accent-emerald w-[72%]"></div>
-                                    </div>
-                                    <div class="flex justify-between text-[9px] text-slate-500 font-mono">
-                                        <span>72% fleet allocation</span>
-                                        <span>Avg. Delivery: 24 mins</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+        <!-- 3. Trusted By Section -->
+        <section class="border-t border-brand-border bg-brand-light py-12">
+            <div class="max-w-7xl mx-auto px-6 text-center space-y-6">
+                <span class="text-xs font-bold uppercase tracking-widest text-brand-muted block">Platform Milestones</span>
+                <div class="flex flex-col sm:flex-row items-center justify-center gap-8 sm:gap-16 text-brand-muted">
+                    <div class="flex items-center space-x-2">
+                        <span class="w-2 h-2 rounded-full bg-brand-blue animate-pulse"></span>
+                        <span class="text-sm font-semibold text-brand-dark">Coming Soon: Extended Platform Integrations</span>
+                    </div>
+                    <div class="flex items-center space-x-2">
+                        <span class="w-2 h-2 rounded-full bg-brand-emerald"></span>
+                        <span class="text-sm font-semibold text-brand-dark">Early Access Businesses Enrolling</span>
+                    </div>
+                    <div class="flex items-center space-x-2">
+                        <span class="w-2 h-2 rounded-full bg-brand-blue"></span>
+                        <span class="text-sm font-semibold text-brand-dark">Growing Across Maharashtra</span>
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- 2. Why Martyard Section -->
-        <section id="why" class="border-t border-slate-900 bg-slate-900/40 py-24">
+        <!-- 4. About Martyard Section -->
+        <section id="about" class="py-24 bg-white relative">
+            <div class="max-w-5xl mx-auto px-6 text-center space-y-8">
+                <div class="inline-flex items-center space-x-2 bg-brand-emerald/5 border border-brand-emerald/10 rounded-full px-3 py-1 text-xs text-brand-emerald font-medium">
+                    <span>Sovereign Local Empowerment</span>
+                </div>
+                <h2 class="text-3xl sm:text-4xl font-extrabold text-brand-dark tracking-tight">
+                    Unified Operations for Offline Merchants
+                </h2>
+                <p class="text-brand-muted text-base sm:text-lg max-w-3xl mx-auto leading-relaxed">
+                    Martyard is an all-in-one digital commerce platform designed for local businesses. From creating an online storefront to managing products, customer enquiries, and local deliveries, Martyard provides everything needed to grow in the digital era.
+                </p>
+                <div class="pt-6 grid grid-cols-1 sm:grid-cols-3 gap-6 max-w-4xl mx-auto text-left">
+                    <div class="p-6 bg-brand-light rounded-xl border border-brand-border space-y-2">
+                        <h4 class="font-bold text-brand-dark text-sm">Empathetic SaaS Pricing</h4>
+                        <p class="text-xs text-brand-muted leading-relaxed">Flat subscription metrics matching the exact cash flows of neighborhood Indian merchants, rather than aggressive transaction-cut models.</p>
+                    </div>
+                    <div class="p-6 bg-brand-light rounded-xl border border-brand-border space-y-2">
+                        <h4 class="font-bold text-brand-dark text-sm">Direct Customer Channels</h4>
+                        <p class="text-xs text-brand-muted leading-relaxed">No brokerage intermediaries or traffic auction blockages. We route discoverable neighborhood queries directly to the business.</p>
+                    </div>
+                    <div class="p-6 bg-brand-light rounded-xl border border-brand-border space-y-2">
+                        <h4 class="font-bold text-brand-dark text-sm">Optimized Performance</h4>
+                        <p class="text-xs text-brand-muted leading-relaxed">Consoles and catalogues optimized to load within milliseconds across all standard 4G and 5G mobile networks.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 5. Features Section -->
+        <section id="features" class="py-24 bg-brand-light border-t border-b border-brand-border">
             <div class="max-w-7xl mx-auto px-6 space-y-16">
+                
                 <div class="text-center max-w-3xl mx-auto space-y-4">
-                    <h2 class="text-xs font-bold tracking-widest text-accent-blue uppercase">Enterprise Digitization Framework</h2>
-                    <p class="text-3xl sm:text-4xl font-extrabold text-white tracking-tight">
-                        Built for Local Commerce Operations
-                    </p>
-                    <p class="text-slate-400 text-sm">
-                        Martyard moves traditional physical stores past advertising brokerage channels into transactional self-reliance. We build software frameworks that put local businesses in absolute control.
-                    </p>
+                    <span class="text-xs font-bold tracking-widest text-brand-blue uppercase block">Core Capability Stack</span>
+                    <h2 class="text-3xl font-extrabold tracking-tight text-brand-dark">Built to Support Local Operations</h2>
+                    <p class="text-brand-muted text-sm">A robust list of platform modules engineered to handle the complexities of cataloging, direct customer dispatches, and merchant growth metrics.</p>
                 </div>
 
-                <!-- 4 Sleek Cards Grid -->
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                <!-- 6 Cards Grid -->
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    
                     <!-- Card 1 -->
-                    <div class="bg-slate-900/60 border border-slate-850 rounded-xl p-8 space-y-4 hover:border-slate-800 transition-all">
-                        <div class="w-10 h-10 rounded-lg bg-accent-blue/10 border border-accent-blue/20 flex items-center justify-center text-accent-blue">
+                    <div class="bg-white border border-brand-border rounded-xl p-8 space-y-4 hover:shadow-md transition-all">
+                        <div class="w-10 h-10 rounded-lg bg-brand-blue/10 flex items-center justify-center text-brand-blue">
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path></svg>
                         </div>
-                        <h3 class="text-base font-bold text-white">1. Verified Profile Page</h3>
-                        <p class="text-slate-400 text-xs leading-relaxed">
-                            A clean, modern storefront for every local enterprise. Completely verified with structured contact mechanics to route local discovery directly without intermediaries.
+                        <h3 class="text-base font-bold text-brand-dark">Business Profile</h3>
+                        <p class="text-brand-muted text-xs leading-relaxed">
+                            Create a professional online business page. Build trust with neighborhood clients by displaying verified operations addresses, operational schedules, and direct calling mechanics.
                         </p>
                     </div>
 
                     <!-- Card 2 -->
-                    <div class="bg-slate-900/60 border border-slate-850 rounded-xl p-8 space-y-4 hover:border-slate-800 transition-all">
-                        <div class="w-10 h-10 rounded-lg bg-accent-indigo/10 border border-accent-indigo/20 flex items-center justify-center text-accent-indigo">
+                    <div class="bg-white border border-brand-border rounded-xl p-8 space-y-4 hover:shadow-md transition-all">
+                        <div class="w-10 h-10 rounded-lg bg-brand-blue/10 flex items-center justify-center text-brand-blue">
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 10v4a2 2 0 002 2h1.2"></path></svg>
                         </div>
-                        <h3 class="text-base font-bold text-white">2. Product Catalogues</h3>
-                        <p class="text-slate-400 text-xs leading-relaxed">
-                            Publish products, medical diagnostic tests, restaurant menus, or service bookings in under ten minutes with clean UI templates designed to display on any browser view.
+                        <h3 class="text-base font-bold text-brand-dark">Product Catalog</h3>
+                        <p class="text-brand-muted text-xs leading-relaxed">
+                            Manage unlimited products and services. Beautiful item displays with customizable tags and detailed service descriptions configured to display elegantly across mobile browsers.
                         </p>
                     </div>
 
                     <!-- Card 3 -->
-                    <div class="bg-slate-900/60 border border-slate-850 rounded-xl p-8 space-y-4 hover:border-slate-800 transition-all">
-                        <div class="w-10 h-10 rounded-lg bg-accent-emerald/10 border border-accent-emerald/20 flex items-center justify-center text-accent-emerald">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17a2 2 0 11-4 0 2 2 0 014 0zM19 17a2 2 0 11-4 0 2 2 0 014 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16V6a1 1 0 00-1-1H4a1 1 0 00-1 1v10a1 1 0 001 1h1m8-1a1 1 0 01-1 1H9m4-11h3a1 1 0 011 1v3l3 3v5a1 1 0 01-1 1h-1m-6 0h2"></path></svg>
+                    <div class="bg-white border border-brand-border rounded-xl p-8 space-y-4 hover:shadow-md transition-all">
+                        <div class="w-10 h-10 rounded-lg bg-brand-blue/10 flex items-center justify-center text-brand-blue">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"></path></svg>
                         </div>
-                        <h3 class="text-base font-bold text-white">3. Local Delivery Routing</h3>
-                        <p class="text-slate-400 text-xs leading-relaxed">
-                            Fulfill delivery inside Shivaji road or Kolhapur city instantly. Martyard integrates directly with regional local third-party logistics (3PL) partners to coordinate on-demand delivery.
+                        <h3 class="text-base font-bold text-brand-dark">Customer Enquiries</h3>
+                        <p class="text-brand-muted text-xs leading-relaxed">
+                            Receive customer requests instantly. Get direct client enquiries routed straight into your backend console panel, complete with exact customer coordinates and service requirements.
                         </p>
                     </div>
 
                     <!-- Card 4 -->
-                    <div class="bg-slate-900/60 border border-slate-850 rounded-xl p-8 space-y-4 hover:border-slate-800 transition-all">
-                        <div class="w-10 h-10 rounded-lg bg-white/5 border border-white/10 flex items-center justify-center text-slate-200">
+                    <div class="bg-white border border-brand-border rounded-xl p-8 space-y-4 hover:shadow-md transition-all">
+                        <div class="w-10 h-10 rounded-lg bg-brand-blue/10 flex items-center justify-center text-brand-blue">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17a2 2 0 11-4 0 2 2 0 014 0zM19 17a2 2 0 11-4 0 2 2 0 014 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16V6a1 1 0 00-1-1H4a1 1 0 00-1 1v10a1 1 0 001 1h1m8-1a1 1 0 01-1 1H9m4-11h3a1 1 0 011 1v3l3 3v5a1 1 0 01-1 1h-1m-6 0h2"></path></svg>
+                        </div>
+                        <h3 class="text-base font-bold text-brand-dark">Local Delivery</h3>
+                        <p class="text-brand-muted text-xs leading-relaxed">
+                            Manage COD delivery requests. Organize on-demand dispatches inside your regional city hubs with flexible coordinate indicators and dedicated delivery partner metrics.
+                        </p>
+                    </div>
+
+                    <!-- Card 5 -->
+                    <div class="bg-white border border-brand-border rounded-xl p-8 space-y-4 hover:shadow-md transition-all">
+                        <div class="w-10 h-10 rounded-lg bg-brand-blue/10 flex items-center justify-center text-brand-blue">
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 002 2h2a2 2 0 002-2"></path></svg>
                         </div>
-                        <h3 class="text-base font-bold text-white">4. Core Metrics Dashboard</h3>
-                        <p class="text-slate-400 text-xs leading-relaxed">
-                            No complex enterprise tools. Our simplified dashboard allows local merchants to track active orders, calculate daily store earnings, and maintain key client communications.
+                        <h3 class="text-base font-bold text-brand-dark">Analytics</h3>
+                        <p class="text-brand-muted text-xs leading-relaxed">
+                            Track customers and business growth. Access straightforward analytics including daily client counts, top-performing products, average order values, and repeat visitor metrics.
                         </p>
                     </div>
+
+                    <!-- Card 6 -->
+                    <div class="bg-white border border-brand-border rounded-xl p-8 space-y-4 hover:shadow-md transition-all">
+                        <div class="w-10 h-10 rounded-lg bg-brand-blue/10 flex items-center justify-center text-brand-blue">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"></path></svg>
+                        </div>
+                        <h3 class="text-base font-bold text-brand-dark">Admin Dashboard</h3>
+                        <p class="text-brand-muted text-xs leading-relaxed">
+                            Complete control over the platform. Restrict employee roles, configure direct store operating parameters, adjust notification emails, and maintain key client databases securely.
+                        </p>
+                    </div>
+
                 </div>
             </div>
         </section>
 
-        <!-- 3. How It Works Section -->
-        <section id="how" class="py-24 max-w-7xl mx-auto px-6 space-y-16">
-            <div class="text-center max-w-3xl mx-auto space-y-4">
-                <h2 class="text-xs font-bold tracking-widest text-accent-emerald uppercase">Step-by-Step Onboarding Architecture</h2>
-                <p class="text-3xl font-extrabold text-white tracking-tight">The 6-Step Digitization Pipeline</p>
-                <p class="text-slate-400 text-sm">A highly streamlined, clean operational flow that helps any small business move from physical setup to unified digital delivery under 24 hours.</p>
-            </div>
-
-            <!-- Sleek Horizontal/Vertical Timeline -->
-            <div class="relative grid grid-cols-1 md:grid-cols-3 lg:grid-cols-6 gap-8">
-                <!-- Step 1 -->
-                <div class="space-y-3 relative group">
-                    <div class="h-1 bg-slate-800 rounded group-hover:bg-accent-blue transition-colors"></div>
-                    <span class="text-[10px] font-mono text-accent-blue font-bold uppercase tracking-widest block pt-2">Step 01</span>
-                    <h4 class="text-sm font-bold text-slate-100">Merchant Registration</h4>
-                    <p class="text-slate-400 text-xs">Merchant enters core details, legal identification parameters, and exact operational location.</p>
-                </div>
-
-                <!-- Step 2 -->
-                <div class="space-y-3 relative group">
-                    <div class="h-1 bg-slate-800 rounded group-hover:bg-accent-blue transition-colors"></div>
-                    <span class="text-[10px] font-mono text-accent-blue font-bold uppercase tracking-widest block pt-2">Step 02</span>
-                    <h4 class="text-sm font-bold text-slate-100">Vetting & Compliance</h4>
-                    <p class="text-slate-400 text-xs">Martyard verifies business credentials with physical/regional address parameters manually.</p>
-                </div>
-
-                <!-- Step 3 -->
-                <div class="space-y-3 relative group">
-                    <div class="h-1 bg-slate-800 rounded group-hover:bg-accent-blue transition-colors"></div>
-                    <span class="text-[10px] font-mono text-accent-blue font-bold uppercase tracking-widest block pt-2">Step 03</span>
-                    <h4 class="text-sm font-bold text-slate-100">Upload Catalogue</h4>
-                    <p class="text-slate-400 text-xs">Merchant populates active products, services, operating rates, and precise timing matrices.</p>
-                </div>
-
-                <!-- Step 4 -->
-                <div class="space-y-3 relative group">
-                    <div class="h-1 bg-slate-800 rounded group-hover:bg-accent-blue transition-colors"></div>
-                    <span class="text-[10px] font-mono text-accent-blue font-bold uppercase tracking-widest block pt-2">Step 04</span>
-                    <h4 class="text-sm font-bold text-slate-100">Hyperlocal Discovery</h4>
-                    <p class="text-slate-400 text-xs">Store goes live on the regional Martyard index, immediately visible to local neighborhood client inquiries.</p>
-                </div>
-
-                <!-- Step 5 -->
-                <div class="space-y-3 relative group">
-                    <div class="h-1 bg-slate-800 rounded group-hover:bg-accent-blue transition-colors"></div>
-                    <span class="text-[10px] font-mono text-accent-blue font-bold uppercase tracking-widest block pt-2">Step 05</span>
-                    <h4 class="text-sm font-bold text-slate-100">Instant Digital Ordering</h4>
-                    <p class="text-slate-400 text-xs">Customers select services or products, trigger checkout, and settle payments natively.</p>
-                </div>
-
-                <!-- Step 6 -->
-                <div class="space-y-3 relative group">
-                    <div class="h-1 bg-slate-800 rounded group-hover:bg-accent-blue transition-colors"></div>
-                    <span class="text-[10px] font-mono text-accent-blue font-bold uppercase tracking-widest block pt-2">Step 06</span>
-                    <h4 class="text-sm font-bold text-slate-100">Regional Fulfillment</h4>
-                    <p class="text-slate-400 text-xs">Sellers dispatch active orders via regional courier routing partners safely to client doors.</p>
-                </div>
-            </div>
-        </section>
-
-        <!-- 4. Interactive Product Showcase Section (No fake simulations, real interactive preview mockup) -->
-        <section id="product" class="py-24 bg-slate-900/30 border-t border-b border-slate-900 relative">
-            <div class="max-w-7xl mx-auto px-6 space-y-16 relative">
+        <!-- 6. Dashboard Preview Section -->
+        <section id="dashboard" class="py-24 bg-white">
+            <div class="max-w-7xl mx-auto px-6 space-y-12">
                 <div class="text-center max-w-3xl mx-auto space-y-4">
-                    <h2 class="text-xs font-bold tracking-widest text-accent-indigo uppercase">Interactive Workspace Sandbox</h2>
-                    <p class="text-3xl font-extrabold text-white tracking-tight">One Unified Interface, Multi-Device Precision</p>
-                    <p class="text-slate-400 text-sm">Click the navigation buttons below to explore how the Martyard platform renders across standard operational views in our core dashboard framework.</p>
+                    <span class="text-xs font-bold tracking-widest text-brand-blue uppercase block">Interactive Interface Preview</span>
+                    <h2 class="text-3xl font-extrabold text-brand-dark tracking-tight">Explore the Platform Layouts</h2>
+                    <p class="text-brand-muted text-sm">Click the buttons below to examine how Martyard’s clean, lightweight architecture adapts for different operational user roles.</p>
                 </div>
 
-                <!-- Interactive Switcher Wrapper -->
-                <div class="max-w-5xl mx-auto space-y-8">
-                    <!-- Nav Controls -->
-                    <div class="flex justify-center flex-wrap gap-2 text-xs font-medium bg-slate-950 p-1.5 rounded-lg border border-slate-800 max-w-lg mx-auto">
-                        <button onclick="switchProductMockup('desktop-dash')" id="btn-desktop-dash" class="px-4 py-2 bg-slate-900 text-white rounded font-bold transition-all">
-                            Desktop Dashboard
-                        </button>
-                        <button onclick="switchProductMockup('customer-app')" id="btn-customer-app" class="px-4 py-2 text-slate-400 hover:text-white rounded font-medium transition-all">
-                            Customer App View
-                        </button>
-                        <button onclick="switchProductMockup('delivery-app')" id="btn-delivery-app" class="px-4 py-2 text-slate-400 hover:text-white rounded font-medium transition-all">
-                            Delivery Manifests
-                        </button>
-                        <button onclick="switchProductMockup('admin-panel')" id="btn-admin-panel" class="px-4 py-2 text-slate-400 hover:text-white rounded font-medium transition-all">
-                            System Admin Console
-                        </button>
-                    </div>
-
-                    <!-- Display Window Panel -->
-                    <div class="bg-slate-900 border border-slate-800 rounded-xl overflow-hidden min-h-[420px] flex flex-col justify-between">
-                        <!-- Top Chrome Elements -->
-                        <div class="px-4 py-3 bg-slate-950 border-b border-slate-850 flex items-center space-x-2 text-[10px] text-slate-500 font-mono tracking-wider">
-                            <span class="w-2.5 h-2.5 rounded-full bg-slate-800"></span>
-                            <span class="w-2.5 h-2.5 rounded-full bg-slate-800"></span>
-                            <span class="w-2.5 h-2.5 rounded-full bg-slate-800"></span>
-                            <span id="mockup-header-title" class="pl-4">DESKTOP_MERCHANT_CONSOLE.DAT</span>
-                        </div>
-
-                        <!-- Changing Pane Areas -->
-                        <div class="p-8 flex-1 flex flex-col justify-center">
-                            
-                            <!-- Pane 1: Desktop Dash -->
-                            <div id="pane-desktop-dash" class="space-y-6">
-                                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
-                                    <div class="space-y-4">
-                                        <div class="inline-flex bg-accent-blue/10 text-accent-blue px-2 py-0.5 rounded text-[10px] font-bold">MERCHANT TERMINAL</div>
-                                        <h3 class="text-xl font-bold text-white">Full-Fidelity Merchant Operational Suite</h3>
-                                        <p class="text-slate-400 text-xs leading-relaxed">
-                                            Empowers local business owners to oversee inventory, tracking metrics, and delivery dispatches in an streamlined web environment. Optimized to load instantaneously over entry-level 4G/5G connections across Tier 2 and Tier 3 Indian cities.
-                                        </p>
-                                        <ul class="space-y-2 text-xs text-slate-300">
-                                            <li class="flex items-center gap-2">✔ Simplified GST compliant invoicing module.</li>
-                                            <li class="flex items-center gap-2">✔ Single click catalog publishing mechanism.</li>
-                                            <li class="flex items-center gap-2">✔ Visual ledger tracking daily net merchant payouts.</li>
-                                        </ul>
-                                    </div>
-                                    <div class="bg-slate-950 p-6 rounded-lg border border-slate-850 space-y-4">
-                                        <span class="text-[10px] font-mono text-slate-500 tracking-wider uppercase block">Simulated Analytics</span>
-                                        <div class="h-28 flex items-end gap-2 border-b border-slate-850 pb-2">
-                                            <div class="w-full bg-accent-blue h-[40%] rounded-t-sm"></div>
-                                            <div class="w-full bg-accent-blue h-[65%] rounded-t-sm"></div>
-                                            <div class="w-full bg-accent-blue h-[85%] rounded-t-sm"></div>
-                                            <div class="w-full bg-accent-blue h-[55%] rounded-t-sm"></div>
-                                            <div class="w-full bg-accent-blue h-[95%] rounded-t-sm animate-pulse"></div>
-                                        </div>
-                                        <div class="flex justify-between text-[9px] text-slate-500 font-mono">
-                                            <span>Mon</span><span>Wed</span><span>Fri</span><span>Sat (Peak)</span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Pane 2: Customer App (Hidden by default) -->
-                            <div id="pane-customer-app" class="hidden space-y-6">
-                                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
-                                    <div class="space-y-4">
-                                        <div class="inline-flex bg-accent-indigo/10 text-accent-indigo px-2 py-0.5 rounded text-[10px] font-bold">MOBILE CUSTOMER APP</div>
-                                        <h3 class="text-xl font-bold text-white">Frictionless Discovery Interface</h3>
-                                        <p class="text-slate-400 text-xs leading-relaxed">
-                                            The consumer app focuses on extreme loading speeds. Users can instantly discover verified neighborhood service hubs, view updated catalogues, scan items, and place direct local delivery orders without standard directory spam.
-                                        </p>
-                                        <ul class="space-y-2 text-xs text-slate-300">
-                                            <li class="flex items-center gap-2">✔ High-speed localized geolocation tracking routing.</li>
-                                            <li class="flex items-center gap-2">✔ UPI direct settlement checkout protocols.</li>
-                                            <li class="flex items-center gap-2">✔ Verified GPS-vetted customer review logs.</li>
-                                        </ul>
-                                    </div>
-                                    <div class="max-w-xs mx-auto bg-slate-950 p-4 rounded-2xl border-2 border-slate-800 space-y-4">
-                                        <!-- Mock Phone view -->
-                                        <div class="flex justify-between items-center text-[10px] text-slate-500 border-b border-slate-850 pb-2">
-                                            <span>Martyard Shivaji Rd</span>
-                                            <span>4G 📶</span>
-                                        </div>
-                                        <div class="space-y-2">
-                                            <span class="text-xs font-bold text-white block">Nearby Medical Hubs</span>
-                                            <div class="bg-slate-900 p-2.5 rounded border border-slate-800 space-y-1">
-                                                <p class="text-[11px] font-bold text-white">Apex Diagnostics</p>
-                                                <p class="text-[9px] text-slate-400">Shivaji Rd • 1.2 KM away</p>
-                                            </div>
-                                            <div class="bg-slate-900 p-2.5 rounded border border-slate-800 space-y-1">
-                                                <p class="text-[11px] font-bold text-white">City Pharmacy & Labs</p>
-                                                <p class="text-[9px] text-slate-400">Tarabai Park • 3.4 KM away</p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Pane 3: Delivery App (Hidden by default) -->
-                            <div id="pane-delivery-app" class="hidden space-y-6">
-                                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
-                                    <div class="space-y-4">
-                                        <div class="inline-flex bg-accent-emerald/10 text-accent-emerald px-2 py-0.5 rounded text-[10px] font-bold">LOGISTICS MATRIX</div>
-                                        <h3 class="text-xl font-bold text-white">Automated Delivery Manifest Dispatch</h3>
-                                        <p class="text-slate-400 text-xs leading-relaxed">
-                                            Allows merchants to coordinate delivery operations automatically. Integrated directly with premier localized third-party dispatch companies, ensuring smooth transport logistics at near-zero administrative friction.
-                                        </p>
-                                        <ul class="space-y-2 text-xs text-slate-300">
-                                            <li class="flex items-center gap-2">✔ Automated destination routing protocols.</li>
-                                            <li class="flex items-center gap-2">✔ Live progress tracking alerts with consumer sync.</li>
-                                            <li class="flex items-center gap-2">✔ Cash-On-Delivery & prepaid settlement trackers.</li>
-                                        </ul>
-                                    </div>
-                                    <div class="bg-slate-950 p-5 rounded-lg border border-slate-850 space-y-3">
-                                        <span class="text-[10px] font-mono text-slate-500 block uppercase">Active Dispatch Manifest</span>
-                                        <div class="p-3 bg-slate-900 rounded border border-slate-800 space-y-2 text-xs">
-                                            <div class="flex justify-between font-bold">
-                                                <span>Courier Partner #Dunzo-42</span>
-                                                <span class="text-accent-emerald">Transit</span>
-                                            </div>
-                                            <p class="text-slate-400 text-[10px]">Package ID: PKG-285A9 • Target: Rajarampuri, Kolhapur</p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Pane 4: Admin Panel (Hidden by default) -->
-                            <div id="pane-admin-panel" class="hidden space-y-6">
-                                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
-                                    <div class="space-y-4">
-                                        <div class="inline-flex bg-white/10 text-slate-300 px-2 py-0.5 rounded text-[10px] font-bold">CENTRAL ADMIN CONSOLE</div>
-                                        <h3 class="text-xl font-bold text-white">Central Operations Management</h3>
-                                        <p class="text-slate-400 text-xs leading-relaxed">
-                                            The system administrator engine that monitors regional registrations, schedules localized compliance checks, coordinates payment clearances, and maintains direct platform security integrity.
-                                        </p>
-                                        <ul class="space-y-2 text-xs text-slate-300">
-                                            <li class="flex items-center gap-2">✔ Centralized legal database authentication systems.</li>
-                                            <li class="flex items-center gap-2">✔ Real-time system API connection health checker.</li>
-                                            <li class="flex items-center gap-2">✔ Automated transaction disputes triage routing.</li>
-                                        </ul>
-                                    </div>
-                                    <div class="bg-slate-950 p-5 rounded-lg border border-slate-850 font-mono text-[10px] text-slate-400 space-y-1.5">
-                                        <p class="text-slate-500">// Terminal initialization log</p>
-                                        <p class="text-accent-emerald">[SYS] Gateway link secure: Shivaji Road Node Active</p>
-                                        <p class="text-slate-300">[API] Registered verified merchant check completed: 100% Ok</p>
-                                        <p class="text-accent-blue">[LEDGER] Clearing transaction pool cycle: Auto-process complete</p>
-                                    </div>
-                                </div>
-                            </div>
-
-                        </div>
-
-                        <!-- Footer disclaimer info inside window -->
-                        <div class="px-6 py-3 bg-slate-950 border-t border-slate-850 text-slate-500 text-[10px] flex justify-between items-center">
-                            <span>UI version: Release 3.10-LTS</span>
-                            <span>Secure SSL Encrypted Session</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- 5. Market Opportunity Section -->
-        <section id="market" class="py-24 max-w-7xl mx-auto px-6 space-y-16">
-            <div class="text-center max-w-3xl mx-auto space-y-4">
-                <h2 class="text-xs font-bold tracking-widest text-accent-blue uppercase">Addressable Market Demographics</h2>
-                <p class="text-3xl font-extrabold text-white tracking-tight">Vast & Unexplored Hyperlocal TAM</p>
-                <p class="text-slate-400 text-sm">India hosts over 63 million small and medium enterprises. The transition of this massive merchant ecosystem to direct digital operations represents a generational economic shift.</p>
-            </div>
-
-            <!-- Solid Demographic Grid -->
-            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
-                <!-- Left: Concrete Numbers -->
-                <div class="lg:col-span-5 space-y-6">
-                    <h3 class="text-xl font-bold text-white">Target Regional Sectors Mapped</h3>
-                    <p class="text-slate-400 text-xs leading-relaxed">
-                        Instead of aiming at complex multi-national enterprises, Martyard has mapped six highly resilient, neighborhood business sectors that require basic, daily-use digital platform capabilities.
-                    </p>
-                    <div class="space-y-4 text-xs">
-                        <!-- Progress 1 -->
-                        <div class="space-y-1.5">
-                            <div class="flex justify-between font-bold">
-                                <span class="text-slate-300">Retail & Provision Stores (Kiranas)</span>
-                                <span class="text-accent-blue">45% Market Volume</span>
-                            </div>
-                            <div class="h-1.5 bg-slate-900 rounded-full overflow-hidden">
-                                <div class="bg-accent-blue h-full w-[45%]"></div>
-                            </div>
-                        </div>
-                        <!-- Progress 2 -->
-                        <div class="space-y-1.5">
-                            <div class="flex justify-between font-bold">
-                                <span class="text-slate-300">Local Pharmacies & Diagnostic Centers</span>
-                                <span class="text-accent-indigo">20% Market Volume</span>
-                            </div>
-                            <div class="h-1.5 bg-slate-900 rounded-full overflow-hidden">
-                                <div class="bg-accent-indigo h-full w-[20%]"></div>
-                            </div>
-                        </div>
-                        <!-- Progress 3 -->
-                        <div class="space-y-1.5">
-                            <div class="flex justify-between font-bold">
-                                <span class="text-slate-300">Neighborhood Dining & Cafes</span>
-                                <span class="text-accent-emerald">15% Market Volume</span>
-                            </div>
-                            <div class="h-1.5 bg-slate-900 rounded-full overflow-hidden">
-                                <div class="bg-accent-emerald h-full w-[15%]"></div>
-                            </div>
-                        </div>
-                        <!-- Progress 4 -->
-                        <div class="space-y-1.5">
-                            <div class="flex justify-between font-bold">
-                                <span class="text-slate-300">Boutiques, Apparel & Salons</span>
-                                <span class="text-slate-400">20% Market Volume</span>
-                            </div>
-                            <div class="h-1.5 bg-slate-900 rounded-full overflow-hidden">
-                                <div class="bg-slate-700 h-full w-[20%]"></div>
-                            </div>
-                        </div>
-                    </div>
+                <!-- Preview Grid Controls -->
+                <div class="flex flex-wrap justify-center gap-2 max-w-2xl mx-auto bg-brand-light p-1 rounded-xl border border-brand-border">
+                    <button onclick="switchTab('business-dashboard')" id="btn-business-dashboard" class="px-4 py-2 bg-white text-brand-dark font-semibold rounded-lg text-xs shadow-sm transition-all">
+                        Business Dashboard
+                    </button>
+                    <button onclick="switchTab('customer-app')" id="btn-customer-app" class="px-4 py-2 text-brand-muted hover:text-brand-dark font-medium rounded-lg text-xs transition-all">
+                        Customer App
+                    </button>
+                    <button onclick="switchTab('admin-panel')" id="btn-admin-panel" class="px-4 py-2 text-brand-muted hover:text-brand-dark font-medium rounded-lg text-xs transition-all">
+                        Admin Panel
+                    </button>
+                    <button onclick="switchTab('delivery-dashboard')" id="btn-delivery-dashboard" class="px-4 py-2 text-brand-muted hover:text-brand-dark font-medium rounded-lg text-xs transition-all">
+                        Delivery Dashboard
+                    </button>
                 </div>
 
-                <!-- Right: Clean Visual Stat Cards -->
-                <div class="lg:col-span-7 grid grid-cols-1 sm:grid-cols-2 gap-6">
-                    <div class="bg-slate-900/40 border border-slate-850 p-8 rounded-xl space-y-3">
-                        <span class="text-3xl font-extrabold text-white">30%</span>
-                        <h4 class="text-sm font-bold text-slate-200">SME Contribution to GDP</h4>
-                        <p class="text-slate-400 text-xs leading-relaxed">
-                            Small and medium businesses drive approximately 30% of India's Gross Domestic Product, forming the bedrock of state employment and regional economic flow.
-                        </p>
-                    </div>
-
-                    <div class="bg-slate-900/40 border border-slate-850 p-8 rounded-xl space-y-3">
-                        <span class="text-3xl font-extrabold text-accent-emerald">3.4x</span>
-                        <h4 class="text-sm font-bold text-slate-200">Digital Merchant CAGR</h4>
-                        <p class="text-slate-400 text-xs leading-relaxed">
-                            Hyperlocal digital transactions and mobile catalog queries are expanding exponentially in regional Indian centers, indicating massive readiness for software adoption.
-                        </p>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- 6. Sane Revenue Model Section -->
-        <section id="revenue" class="py-24 bg-slate-900/40 border-t border-slate-900">
-            <div class="max-w-7xl mx-auto px-6 space-y-16">
-                <div class="text-center max-w-3xl mx-auto space-y-4">
-                    <h2 class="text-xs font-bold tracking-widest text-accent-indigo uppercase">SaaS Business Economics</h2>
-                    <p class="text-3xl font-extrabold text-white tracking-tight">Clean, Accessible Unit Economics</p>
-                    <p class="text-slate-400 text-sm">We reject complex commission models. Martyard focuses on affordable flat-fee SaaS pricing structures that fit easily into the budget of local neighborhood merchants.</p>
-                </div>
-
-                <!-- 4 Pricing Pillar Cards -->
-                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
-                    <!-- Pillar 1 -->
-                    <div class="bg-slate-900 border border-slate-850 rounded-xl p-8 space-y-4">
-                        <span class="text-[10px] font-mono text-accent-blue font-bold uppercase tracking-wider block">Base License</span>
-                        <h4 class="text-lg font-bold text-white">SaaS Subscription</h4>
-                        <p class="text-3xl font-extrabold text-white">₹499<span class="text-xs font-normal text-slate-500"> /month</span></p>
-                        <p class="text-slate-400 text-xs leading-relaxed">
-                            Merchant Profile Page, up to 100 Catalogue Items, standard digital ordering systems, and localized contact routing mechanics.
-                        </p>
-                    </div>
-
-                    <!-- Pillar 2 -->
-                    <div class="bg-slate-900 border border-slate-850 rounded-xl p-8 space-y-4">
-                        <span class="text-[10px] font-mono text-accent-indigo font-bold uppercase tracking-wider block">Marketing Add-on</span>
-                        <h4 class="text-lg font-bold text-white">Featured Profile</h4>
-                        <p class="text-3xl font-extrabold text-white">₹249<span class="text-xs font-normal text-slate-500"> /month</span></p>
-                        <p class="text-slate-400 text-xs leading-relaxed">
-                            Allows local businesses to feature at the top of localized consumer discovery queues in regional Kolhapur search indexes.
-                        </p>
-                    </div>
-
-                    <!-- Pillar 3 -->
-                    <div class="bg-slate-900 border border-slate-850 rounded-xl p-8 space-y-4">
-                        <span class="text-[10px] font-mono text-accent-emerald font-bold uppercase tracking-wider block">Direct Logistics</span>
-                        <h4 class="text-lg font-bold text-white">Fulfillment API</h4>
-                        <p class="text-3xl font-extrabold text-white">₹2<span class="text-xs font-normal text-slate-500"> /order</span></p>
-                        <p class="text-slate-400 text-xs leading-relaxed">
-                            Low-margin routing commission on each third-party local delivery partner dispatch successfully triggered via Martyard.
-                        </p>
-                    </div>
-
-                    <!-- Pillar 4 -->
-                    <div class="bg-slate-900 border border-slate-850 rounded-xl p-8 space-y-4">
-                        <span class="text-[10px] font-mono text-slate-400 font-bold uppercase tracking-wider block">Premium Verification</span>
-                        <h4 class="text-lg font-bold text-white">Verified Trust Seal</h4>
-                        <p class="text-3xl font-extrabold text-white">₹999<span class="text-xs font-normal text-slate-500"> /year</span></p>
-                        <p class="text-slate-400 text-xs leading-relaxed">
-                            Includes rigorous regional compliance vetting, secure trust-badge graphics on store URL, and high-priority onboarding checkups.
-                        </p>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- 7. Competitive Matrix Section -->
-        <section class="max-w-7xl mx-auto px-6 py-24 space-y-12">
-            <div class="text-center max-w-2xl mx-auto space-y-4">
-                <h2 class="text-xs font-bold tracking-widest text-accent-blue uppercase">Strategic Competitive Positioning</h2>
-                <p class="text-3xl font-extrabold text-white tracking-tight">How Martyard Rewrites Local Search</p>
-                <p class="text-slate-400 text-sm">Legacy directories rely entirely on traffic brokering and high-commission lead sales. Martyard introduces transaction enablement directly to regional businesses.</p>
-            </div>
-
-            <!-- Competitive Comparison Matrix Grid Table -->
-            <div class="overflow-x-auto">
-                <table class="w-full text-left text-xs border-collapse min-w-[700px]">
-                    <thead>
-                        <tr class="border-b border-slate-800 text-slate-400 uppercase tracking-wider text-[10px] font-bold">
-                            <th class="py-4 px-6">Product Capabilities</th>
-                            <th class="py-4 px-6 text-accent-blue bg-accent-blue/5 font-extrabold">Martyard OS</th>
-                            <th class="py-4 px-6">Google Business</th>
-                            <th class="py-4 px-6">Justdial</th>
-                            <th class="py-4 px-6">IndiaMART</th>
-                        </tr>
-                    </thead>
-                    <tbody class="divide-y divide-slate-900">
-                        <tr class="hover:bg-slate-900/20 transition-colors">
-                            <td class="py-4 px-6 font-semibold text-slate-200">Unified Digital Ordering (Checkout / Menus)</td>
-                            <td class="py-4 px-6 text-accent-emerald font-bold bg-accent-blue/5">✓ Standard Feature</td>
-                            <td class="py-4 px-6 text-slate-500">✗ Third-party integration only</td>
-                            <td class="py-4 px-6 text-slate-500">✗ Not supported</td>
-                            <td class="py-4 px-6 text-slate-500">✗ Inquiry model only</td>
-                        </tr>
-                        <tr class="hover:bg-slate-900/20 transition-colors">
-                            <td class="py-4 px-6 font-semibold text-slate-200">On-demand Local Delivery Integration (3PL)</td>
-                            <td class="py-4 px-6 text-accent-emerald font-bold bg-accent-blue/5">✓ Standard Feature</td>
-                            <td class="py-4 px-6 text-slate-500">✗ Not supported</td>
-                            <td class="py-4 px-6 text-slate-500">✗ Not supported</td>
-                            <td class="py-4 px-6 text-slate-500">✗ Not supported</td>
-                        </tr>
-                        <tr class="hover:bg-slate-900/20 transition-colors">
-                            <td class="py-4 px-6 font-semibold text-slate-200">Affordable Flat Rate SaaS (₹499/mo)</td>
-                            <td class="py-4 px-6 text-accent-emerald font-bold bg-accent-blue/5">✓ Yes (Flat-fee)</td>
-                            <td class="py-4 px-6 text-accent-emerald">✓ Yes (Free Tier)</td>
-                            <td class="py-4 px-6 text-slate-500">✗ Aggressive Pay-to-Play Leads</td>
-                            <td class="py-4 px-6 text-slate-500">✗ Premium Subscriptions Only</td>
-                        </tr>
-                        <tr class="hover:bg-slate-900/20 transition-colors">
-                            <td class="py-4 px-6 font-semibold text-slate-200">Dedicated Regional Operations Vetting</td>
-                            <td class="py-4 px-6 text-accent-emerald font-bold bg-accent-blue/5">✓ Handled Manually</td>
-                            <td class="py-4 px-6 text-slate-400">Self-Reported Only</td>
-                            <td class="py-4 px-6 text-slate-500">✗ Not verified</td>
-                            <td class="py-4 px-6 text-slate-400">Vague Documentation</td>
-                        </tr>
-                        <tr class="hover:bg-slate-900/20 transition-colors">
-                            <td class="py-4 px-6 font-semibold text-slate-200">No Advertising Distractions / Direct Leads</td>
-                            <td class="py-4 px-6 text-accent-emerald font-bold bg-accent-blue/5">✓ Zero Interference</td>
-                            <td class="py-4 px-6 text-slate-400">Pushed Local Ads</td>
-                            <td class="py-4 px-6 text-slate-500">✗ Shared Leads sold to 5+ entities</td>
-                            <td class="py-4 px-6 text-slate-500">✗ High auction lead bidding system</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        </section>
-
-        <!-- 8. Strategic Roadmap Section -->
-        <section id="roadmap" class="py-24 border-t border-slate-900 bg-slate-900/30">
-            <div class="max-w-7xl mx-auto px-6 space-y-16">
-                <div class="text-center max-w-3xl mx-auto space-y-4">
-                    <h2 class="text-xs font-bold tracking-widest text-accent-emerald uppercase">Execution Strategy & Traction</h2>
-                    <p class="text-3xl font-extrabold text-white tracking-tight">Phased Regional Expansion Roadmap</p>
-                    <p class="text-slate-400 text-sm">Our execution focuses strictly on hyper-localized city validation. By standardizing operation frameworks in Kolhapur first, we create a repeatable blueprint before expanding across Maharashtra.</p>
-                </div>
-
-                <!-- Modern Roadmap timeline design -->
-                <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
-                    <!-- Phase 1 -->
-                    <div class="bg-slate-900 p-6 rounded-xl border border-slate-850 space-y-3 relative">
-                        <div class="absolute top-0 left-6 -translate-y-1/2 px-2 py-0.5 bg-accent-blue rounded text-[9px] font-mono uppercase font-bold">Phase 1</div>
-                        <span class="text-xs text-slate-500 block pt-2">Q1-Q2 2026</span>
-                        <h4 class="text-sm font-bold text-white">Kolhapur Launch</h4>
-                        <p class="text-slate-400 text-xs leading-relaxed">
-                            Deploy core local commerce application natively. Focus on acquiring Shivaji Road and regional शिवाजी road commercial business nodes to establish base operations.
-                        </p>
-                        <div class="pt-2 border-t border-slate-850 flex items-center space-x-1.5 text-[10px] text-accent-blue">
-                            <span>●</span> <span>Target: 100 Businesses</span>
-                        </div>
-                    </div>
-
-                    <!-- Phase 2 -->
-                    <div class="bg-slate-900 p-6 rounded-xl border border-slate-850 space-y-3 relative">
-                        <div class="absolute top-0 left-6 -translate-y-1/2 px-2 py-0.5 bg-accent-indigo rounded text-[9px] font-mono uppercase font-bold">Phase 2</div>
-                        <span class="text-xs text-slate-500 block pt-2">Q3-Q4 2026</span>
-                        <h4 class="text-sm font-bold text-white">Traction Validation</h4>
-                        <p class="text-slate-400 text-xs leading-relaxed">
-                            Validate localized consumer order pipelines. Verify that neighborhood client dispatches deliver consistently within target 30 minutes limits locally.
-                        </p>
-                        <div class="pt-2 border-t border-slate-850 flex items-center space-x-1.5 text-[10px] text-accent-indigo">
-                            <span>●</span> <span>Target: 1,000 Customers</span>
-                        </div>
-                    </div>
-
-                    <!-- Phase 3 -->
-                    <div class="bg-slate-900 p-6 rounded-xl border border-slate-850 space-y-3 relative">
-                        <div class="absolute top-0 left-6 -translate-y-1/2 px-2 py-0.5 bg-accent-emerald rounded text-[9px] font-mono uppercase font-bold">Phase 3</div>
-                        <span class="text-xs text-slate-500 block pt-2">Q1-Q2 2027</span>
-                        <h4 class="text-sm font-bold text-white">Maharashtra Scale</h4>
-                        <p class="text-slate-400 text-xs leading-relaxed">
-                            Expand platform nodes to neighboring Tier 2 cities in Maharashtra, onboarding regional diagnostic labs, local pharmacies, and retail centers.
-                        </p>
-                        <div class="pt-2 border-t border-slate-850 flex items-center space-x-1.5 text-[10px] text-accent-emerald">
-                            <span>●</span> <span>SaaS Scale Strategy</span>
-                        </div>
-                    </div>
-
-                    <!-- Phase 4 -->
-                    <div class="bg-slate-900 p-6 rounded-xl border border-slate-850 space-y-3 relative">
-                        <div class="absolute top-0 left-6 -translate-y-1/2 px-2 py-0.5 bg-slate-700 rounded text-[9px] font-mono uppercase font-bold">Phase 4</div>
-                        <span class="text-xs text-slate-500 block pt-2">Q3-Q4 2027</span>
-                        <h4 class="text-sm font-bold text-white">Pan-India Integration</h4>
-                        <p class="text-slate-400 text-xs leading-relaxed">
-                            Trigger national operations frameworks mapping key local directories into the centralized digital infrastructure core safely and natively.
-                        </p>
-                        <div class="pt-2 border-t border-slate-850 flex items-center space-x-1.5 text-[10px] text-slate-400">
-                            <span>●</span> <span>National SME Digitization</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- 9. Founder & Vision Section -->
-        <section class="max-w-7xl mx-auto px-6 py-24">
-            <div class="bg-slate-900 border border-slate-850 rounded-2xl p-8 lg:p-12">
-                <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+                <!-- Preview Container Display Pane -->
+                <div class="max-w-5xl mx-auto bg-brand-light border border-brand-border rounded-xl p-6 lg:p-8 shadow-sm">
                     
-                    <!-- Left: Bio Block -->
-                    <div class="lg:col-span-4 text-center space-y-4 lg:border-r lg:border-slate-800 lg:pr-8">
-                        <!-- Polished Avatar placeholder with Gradient -->
-                        <div class="relative w-32 h-32 mx-auto rounded-full bg-gradient-to-tr from-accent-blue via-accent-indigo to-accent-emerald p-1 shadow-lg shadow-accent-blue/10">
-                            <div class="w-full h-full rounded-full bg-slate-950 flex items-center justify-center font-black text-2xl text-slate-300">
-                                S
+                    <!-- View A: Business Dashboard Mock -->
+                    <div id="pane-business-dashboard" class="tab-pane space-y-6">
+                        <div class="grid grid-cols-1 md:grid-cols-12 gap-8 items-center">
+                            <div class="md:col-span-4 space-y-4">
+                                <span class="px-2.5 py-1 bg-brand-blue/10 text-brand-blue text-[10px] font-bold rounded uppercase">For Shop Owners</span>
+                                <h3 class="text-xl font-bold text-brand-dark">Direct Store Administration</h3>
+                                <p class="text-xs text-brand-muted leading-relaxed">
+                                    The core system for small business owners. Monitor incoming buyer queries, print standardized invoices, manage product files, and monitor physical store traffic indices effortlessly.
+                                </p>
                             </div>
-                        </div>
-                        <div>
-                            <h4 class="text-lg font-bold text-white">Sanket Sarjerao More-Patil</h4>
-                            <p class="text-xs text-accent-blue font-mono font-bold uppercase tracking-wider">Founder & CEO</p>
-                        </div>
-                        <div class="flex flex-wrap justify-center gap-1.5 pt-2">
-                            <span class="px-2 py-0.5 bg-slate-800 rounded text-[9px] font-mono text-slate-400 uppercase font-semibold">DevOps</span>
-                            <span class="px-2 py-0.5 bg-slate-800 rounded text-[9px] font-mono text-slate-400 uppercase font-semibold">Cloud</span>
-                            <span class="px-2 py-0.5 bg-slate-800 rounded text-[9px] font-mono text-slate-400 uppercase font-semibold">AI</span>
-                            <span class="px-2 py-0.5 bg-slate-800 rounded text-[9px] font-mono text-slate-400 uppercase font-semibold">Full Stack</span>
+                            <!-- Mock Visualization -->
+                            <div class="md:col-span-8 bg-white border border-brand-border rounded-lg p-5 space-y-4">
+                                <div class="flex justify-between items-center text-xs">
+                                    <span class="font-bold text-brand-dark">Catalogue Products Status</span>
+                                    <span class="text-brand-emerald font-semibold flex items-center gap-1">🟢 14 Active Services</span>
+                                </div>
+                                <div class="space-y-2">
+                                    <div class="h-10 bg-brand-light rounded border border-brand-border flex items-center justify-between px-3 text-xs">
+                                        <span class="font-medium text-brand-dark">Standard Medical Diagnostic Consultation</span>
+                                        <span class="text-brand-muted font-bold">₹500.00</span>
+                                    </div>
+                                    <div class="h-10 bg-brand-light rounded border border-brand-border flex items-center justify-between px-3 text-xs">
+                                        <span class="font-medium text-brand-dark">Comprehensive Heart Wellness Panel</span>
+                                        <span class="text-brand-muted font-bold">₹3,400.00</span>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
 
-                    <!-- Right: Strategic Vision statement -->
-                    <div class="lg:col-span-8 space-y-6">
-                        <span class="text-xs font-bold text-accent-emerald uppercase tracking-widest block">Executive Vision Letter</span>
-                        <h3 class="text-2xl font-extrabold text-white">
-                            "Empowering Neighborhood Business to transcat with Native Digital Capabilities."
-                        </h3>
-                        <p class="text-slate-400 text-xs leading-relaxed">
-                            For years, small regional businesses in India have been targets of aggressive lead-generation tools that drain their profit margins. Martyard is built with a different philosophy. Our core skill stack across Cloud Architecture, Automated Pipelines, and Localized Mobile UX enables us to ship highly efficient, direct software pipelines that cost less than ₹17 a day. 
-                        </p>
-                        <p class="text-slate-400 text-xs leading-relaxed">
-                            Our roadmap starts directly on Shivaji Road, Shivaji road, Shivaji road, Shivaji road in Shivaji road, शिवाजी road in Shivaji road—verifying real businesses, enabling native catalogues, and standardizing local delivery. This is the blueprint for the modern economic engine of digital India.
-                        </p>
+                    <!-- View B: Customer App Mock -->
+                    <div id="pane-customer-app" class="tab-pane hidden space-y-6">
+                        <div class="grid grid-cols-1 md:grid-cols-12 gap-8 items-center">
+                            <div class="md:col-span-4 space-y-4">
+                                <span class="px-2.5 py-1 bg-brand-emerald/10 text-brand-emerald text-[10px] font-bold rounded uppercase">For Buyers</span>
+                                <h3 class="text-xl font-bold text-brand-dark">Frictionless Discovery Page</h3>
+                                <p class="text-xs text-brand-muted leading-relaxed">
+                                    Clean, responsive mobile views built for buyers. Neighbors can access your custom catalogue, choose specific services, and submit verified queries directly from their smartphones.
+                                </p>
+                            </div>
+                            <!-- Mock Visualization -->
+                            <div class="md:col-span-8 flex justify-center">
+                                <div class="w-full max-w-[280px] bg-white border border-brand-border rounded-xl p-4 space-y-3 text-xs shadow-sm">
+                                    <div class="flex justify-between items-center border-b border-brand-border pb-2 text-[10px] text-brand-muted">
+                                        <span>Martyard Shivaji Road</span>
+                                        <span>🟢 Open</span>
+                                    </div>
+                                    <h4 class="font-bold text-brand-dark">Select Service Required</h4>
+                                    <div class="space-y-1.5 text-[11px]">
+                                        <div class="p-2 bg-brand-light border border-brand-border rounded">
+                                            <p class="font-semibold text-brand-dark">Dr. Verma Consultation Slot</p>
+                                            <p class="text-[9px] text-brand-muted">Pediatric care consultation slot</p>
+                                        </div>
+                                        <div class="p-2 bg-brand-light border border-brand-border rounded">
+                                            <p class="font-semibold text-brand-dark">Home Lab Sample Collection</p>
+                                            <p class="text-[9px] text-brand-muted">Standard sample routing to diagnostic lab</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- View C: Admin Panel Mock -->
+                    <div id="pane-admin-panel" class="tab-pane hidden space-y-6">
+                        <div class="grid grid-cols-1 md:grid-cols-12 gap-8 items-center">
+                            <div class="md:col-span-4 space-y-4">
+                                <span class="px-2.5 py-1 bg-brand-dark/10 text-brand-dark text-[10px] font-bold rounded uppercase">For Staff Operations</span>
+                                <h3 class="text-xl font-bold text-brand-dark">Central System Control Console</h3>
+                                <p class="text-xs text-brand-muted leading-relaxed">
+                                    Complete overview of system configurations. Control customer messaging queues, verify active profile logs, and update company contact pathways in one administrative interface.
+                                </p>
+                            </div>
+                            <!-- Mock Visualization -->
+                            <div class="md:col-span-8 bg-white border border-brand-border rounded-lg p-5 space-y-3">
+                                <h4 class="text-xs font-bold text-brand-dark">Platform Settings Matrix</h4>
+                                <div class="grid grid-cols-2 gap-3 text-xs text-brand-muted">
+                                    <div class="p-2.5 bg-brand-light rounded border border-brand-border flex items-center justify-between">
+                                        <span>Direct SMS Alerts</span>
+                                        <span class="text-brand-emerald font-bold">Enabled</span>
+                                    </div>
+                                    <div class="p-2.5 bg-brand-light rounded border border-brand-border flex items-center justify-between">
+                                        <span>UPI Gateway Link</span>
+                                        <span class="text-brand-emerald font-bold">Active</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- View D: Delivery Dashboard Mock -->
+                    <div id="pane-delivery-dashboard" class="tab-pane hidden space-y-6">
+                        <div class="grid grid-cols-1 md:grid-cols-12 gap-8 items-center">
+                            <div class="md:col-span-4 space-y-4">
+                                <span class="px-2.5 py-1 bg-brand-blue/10 text-brand-blue text-[10px] font-bold rounded uppercase">For Dispatch Teams</span>
+                                <h3 class="text-xl font-bold text-brand-dark">Delivery Fulfillment Engine</h3>
+                                <p class="text-xs text-brand-muted leading-relaxed">
+                                    Coordinate Cash-On-Delivery (COD) or self-fulfilled deliveries inside Shivaji Road or Kolhapur limits with clean progress indicators and customer dispatch address logs.
+                                </p>
+                            </div>
+                            <!-- Mock Visualization -->
+                            <div class="md:col-span-8 bg-white border border-brand-border rounded-lg p-5 space-y-3">
+                                <span class="text-[10px] text-brand-muted font-bold uppercase">Pending Dispatch Log</span>
+                                <div class="p-3 bg-brand-light border border-brand-border rounded-md text-xs space-y-1.5">
+                                    <div class="flex justify-between items-center">
+                                        <span class="font-bold text-brand-dark">Order #MY-98301</span>
+                                        <span class="px-2 py-0.5 bg-yellow-100 text-yellow-800 text-[9px] font-bold rounded">Ready to Ship</span>
+                                    </div>
+                                    <p class="text-[11px] text-brand-muted">Address: Flat 42-B, Shivaji Road, Shivaji road, Shivaji road in Shivaji road, शिवाजी road in Shivaji road</p>
+                                </div>
+                            </div>
+                        </div>
                     </div>
 
                 </div>
             </div>
         </section>
 
-        <!-- 10. Investor Contact Section (Simple clean form) -->
-        <section id="contact" class="max-w-3xl mx-auto px-6 py-24 text-center space-y-12">
-            <div class="space-y-4">
-                <span class="text-xs font-bold bg-accent-blue/10 text-accent-blue px-3 py-1 rounded-full uppercase">Get in Touch</span>
-                <h2 class="text-3xl font-extrabold text-white tracking-tight">Request Core Investor Materials</h2>
-                <p class="text-slate-400 text-sm">Please register your name, corporate/institution email address, and strategic interest to secure the comprehensive Martyard Pitch Deck and regional unit economics spreadsheets.</p>
-            </div>
+        <!-- 7. How It Works Section -->
+        <section id="how-it-works" class="py-24 bg-brand-light border-t border-b border-brand-border">
+            <div class="max-w-7xl mx-auto px-6 space-y-16">
+                
+                <div class="text-center max-w-2xl mx-auto space-y-4">
+                    <span class="text-xs font-bold tracking-widest text-brand-blue uppercase block">The Customer Path</span>
+                    <h2 class="text-3xl font-extrabold text-brand-dark tracking-tight">How Martyard Connects Your Shop</h2>
+                    <p class="text-brand-muted text-sm">Our straightforward pipeline enables brick-and-mortar stores to launch digital storefront catalogues and receive neighborhood dispatches easily.</p>
+                </div>
 
-            <!-- Sleek form -->
-            <form action="#" class="bg-slate-900 border border-slate-850 rounded-xl p-8 space-y-4 text-left max-w-xl mx-auto shadow-xl" onsubmit="event.preventDefault(); triggerDemoNotification();">
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <div class="space-y-1">
-                        <label class="block text-[10px] font-bold text-slate-400 uppercase">Your Name</label>
-                        <input type="text" required placeholder="Siddharth Mehta" class="w-full p-3 bg-slate-950 border border-slate-850 rounded-lg text-xs text-white focus:outline-none focus:border-accent-blue">
+                <!-- Structured Timeline Cards Path -->
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <!-- Step 1 -->
+                    <div class="bg-white p-6 rounded-xl border border-brand-border relative space-y-3">
+                        <span class="text-xs font-bold font-mono text-brand-blue block">Step 1</span>
+                        <h4 class="text-base font-bold text-brand-dark">1. Business registers</h4>
+                        <p class="text-brand-muted text-xs leading-relaxed">Shop owners input essential details, contact mechanisms, and offline store location indicators on the platform.</p>
                     </div>
-                    <div class="space-y-1">
-                        <label class="block text-[10px] font-bold text-slate-400 uppercase">Business Email</label>
-                        <input type="email" required placeholder="siddharth@venturefund.in" class="w-full p-3 bg-slate-950 border border-slate-850 rounded-lg text-xs text-white focus:outline-none focus:border-accent-blue">
+
+                    <!-- Step 2 -->
+                    <div class="bg-white p-6 rounded-xl border border-brand-border relative space-y-3">
+                        <span class="text-xs font-bold font-mono text-brand-blue block">Step 2</span>
+                        <h4 class="text-base font-bold text-brand-dark">2. Gets verified</h4>
+                        <p class="text-brand-muted text-xs leading-relaxed">Our registration platform filters credentials manually, confirming address parameters match physical store location.</p>
+                    </div>
+
+                    <!-- Step 3 -->
+                    <div class="bg-white p-6 rounded-xl border border-brand-border relative space-y-3">
+                        <span class="text-xs font-bold font-mono text-brand-blue block">Step 3</span>
+                        <h4 class="text-base font-bold text-brand-dark">3. Uploads products</h4>
+                        <p class="text-brand-muted text-xs leading-relaxed">Merchant populates active products, diagnostics tests, dining menus, or operating service rate matrices.</p>
+                    </div>
+
+                    <!-- Step 4 -->
+                    <div class="bg-white p-6 rounded-xl border border-brand-border relative space-y-3">
+                        <span class="text-xs font-bold font-mono text-brand-blue block">Step 4</span>
+                        <h4 class="text-brand-muted text-xs block">4. Customers discover</h4>
+                        <p class="text-brand-muted text-xs leading-relaxed">The business profile goes live on regional directory searches, immediately visible to local neighborhood client queries.</p>
+                    </div>
+
+                    <!-- Step 5 -->
+                    <div class="bg-white p-6 rounded-xl border border-brand-border relative space-y-3">
+                        <span class="text-xs font-bold font-mono text-brand-blue block">Step 5</span>
+                        <h4 class="text-brand-muted text-xs block">5. Place order</h4>
+                        <p class="text-brand-muted text-xs leading-relaxed">Local buyers choose catalog items and place direct digital requests to the merchant console securely.</p>
+                    </div>
+
+                    <!-- Step 6 -->
+                    <div class="bg-white p-6 rounded-xl border border-brand-border relative space-y-3">
+                        <span class="text-xs font-bold font-mono text-brand-blue block">Step 6</span>
+                        <h4 class="text-brand-muted text-xs block">6. Business delivers</h4>
+                        <p class="text-brand-muted text-xs leading-relaxed">Sellers dispatch active orders via neighborhood courier dispatches, organizing secure direct deliveries safely.</p>
                     </div>
                 </div>
-                <div class="space-y-1">
-                    <label class="block text-[10px] font-bold text-slate-400 uppercase">Your Institution / Fund Affiliation</label>
-                    <input type="text" required placeholder="e.g. Nexus India Partners / Angel Syndicate" class="w-full p-3 bg-slate-950 border border-slate-850 rounded-lg text-xs text-white focus:outline-none focus:border-accent-blue">
+
+            </div>
+        </section>
+
+        <!-- 8. Industries Section -->
+        <section id="industries" class="py-24 bg-white">
+            <div class="max-w-7xl mx-auto px-6 space-y-12">
+                <div class="text-center max-w-3xl mx-auto space-y-4">
+                    <span class="text-xs font-bold tracking-widest text-brand-emerald uppercase block">Sectors & Solutions</span>
+                    <h2 class="text-3xl font-extrabold text-brand-dark tracking-tight">Tailored Solutions for Every Sector</h2>
+                    <p class="text-brand-muted text-sm">Martyard’s adaptive workspace dashboard matches the exact operational workflows of various neighborhood business models.</p>
                 </div>
-                <div class="space-y-1">
-                    <label class="block text-[10px] font-bold text-slate-400 uppercase">Inquiry specifics</label>
-                    <textarea rows="3" required placeholder="How can Martyard collaborate with your strategic investment directives?" class="w-full p-3 bg-slate-950 border border-slate-850 rounded-lg text-xs text-white focus:outline-none focus:border-accent-blue resize-none"></textarea>
+
+                <!-- Industries Grid -->
+                <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 max-w-5xl mx-auto">
+                    <!-- Industry Card -->
+                    <div class="p-4 bg-brand-light border border-brand-border rounded-xl text-center space-y-1.5 hover:shadow-sm transition-all duration-300">
+                        <span class="text-xl block">🍔</span>
+                        <h4 class="text-xs font-bold text-brand-dark uppercase tracking-wide">Restaurants</h4>
+                    </div>
+                    <!-- Industry Card -->
+                    <div class="p-4 bg-brand-light border border-brand-border rounded-xl text-center space-y-1.5 hover:shadow-sm transition-all duration-300">
+                        <span class="text-xl block">💊</span>
+                        <h4 class="text-xs font-bold text-brand-dark uppercase tracking-wide">Medical Stores</h4>
+                    </div>
+                    <!-- Industry Card -->
+                    <div class="p-4 bg-brand-light border border-brand-border rounded-xl text-center space-y-1.5 hover:shadow-sm transition-all duration-300">
+                        <span class="text-xl block">🩺</span>
+                        <h4 class="text-xs font-bold text-brand-dark uppercase tracking-wide">Clinics</h4>
+                    </div>
+                    <!-- Industry Card -->
+                    <div class="p-4 bg-brand-light border border-brand-border rounded-xl text-center space-y-1.5 hover:shadow-sm transition-all duration-300">
+                        <span class="text-xl block">⚡</span>
+                        <h4 class="text-xs font-bold text-brand-dark uppercase tracking-wide">Electronics</h4>
+                    </div>
+                    <!-- Industry Card -->
+                    <div class="p-4 bg-brand-light border border-brand-border rounded-xl text-center space-y-1.5 hover:shadow-sm transition-all duration-300">
+                        <span class="text-xl block">👔</span>
+                        <h4 class="text-xs font-bold text-brand-dark uppercase tracking-wide">Fashion</h4>
+                    </div>
+                    <!-- Industry Card -->
+                    <div class="p-4 bg-brand-light border border-brand-border rounded-xl text-center space-y-1.5 hover:shadow-sm transition-all duration-300">
+                        <span class="text-xl block">🔨</span>
+                        <h4 class="text-xs font-bold text-brand-dark uppercase tracking-wide">Hardware</h4>
+                    </div>
+                    <!-- Industry Card -->
+                    <div class="p-4 bg-brand-light border border-brand-border rounded-xl text-center space-y-1.5 hover:shadow-sm transition-all duration-300">
+                        <span class="text-xl block">🛋️</span>
+                        <h4 class="text-xs font-bold text-brand-dark uppercase tracking-wide">Furniture</h4>
+                    </div>
+                    <!-- Industry Card -->
+                    <div class="p-4 bg-brand-light border border-brand-border rounded-xl text-center space-y-1.5 hover:shadow-sm transition-all duration-300">
+                        <span class="text-xl block">🍎</span>
+                        <h4 class="text-xs font-bold text-brand-dark uppercase tracking-wide">Groceries</h4>
+                    </div>
+                    <!-- Industry Card -->
+                    <div class="p-4 bg-brand-light border border-brand-border rounded-xl text-center space-y-1.5 hover:shadow-sm transition-all duration-300">
+                        <span class="text-xl block">💅</span>
+                        <h4 class="text-xs font-bold text-brand-dark uppercase tracking-wide">Beauty</h4>
+                    </div>
+                    <!-- Industry Card -->
+                    <div class="p-4 bg-brand-light border border-brand-border rounded-xl text-center space-y-1.5 hover:shadow-sm transition-all duration-300">
+                        <span class="text-xl block">🚗</span>
+                        <h4 class="text-xs font-bold text-brand-dark uppercase tracking-wide">Automobile</h4>
+                    </div>
+                    <!-- Industry Card -->
+                    <div class="p-4 bg-brand-light border border-brand-border rounded-xl text-center space-y-1.5 hover:shadow-sm transition-all duration-300">
+                        <span class="text-xl block">📚</span>
+                        <h4 class="text-xs font-bold text-brand-dark uppercase tracking-wide">Education</h4>
+                    </div>
+                    <!-- Industry Card -->
+                    <div class="p-4 bg-brand-light border border-brand-border rounded-xl text-center space-y-1.5 hover:shadow-sm transition-all duration-300">
+                        <span class="text-xl block">🧹</span>
+                        <h4 class="text-xs font-bold text-brand-dark uppercase tracking-wide">Home Services</h4>
+                    </div>
                 </div>
-                <button type="submit" class="w-full py-3.5 bg-white hover:bg-slate-100 text-slate-950 rounded-lg text-xs font-bold uppercase tracking-wider transition-all shadow-md">
-                    Secure Strategic Access Pass
-                </button>
-            </form>
+
+            </div>
+        </section>
+
+        <!-- 9. Why Martyard Section -->
+        <section class="py-24 bg-brand-light border-t border-b border-brand-border">
+            <div class="max-w-7xl mx-auto px-6 space-y-12">
+                <div class="text-center max-w-2xl mx-auto space-y-4">
+                    <span class="text-xs font-bold tracking-widest text-brand-blue uppercase block">Comparative Advantage</span>
+                    <h2 class="text-3xl font-extrabold text-brand-dark tracking-tight">The Modern Standard of Commerce</h2>
+                    <p class="text-brand-muted text-sm">See how Martyard moves offline physical stores past traditional, paper-ledger setups into streamlined cloud metrics easily.</p>
+                </div>
+
+                <!-- Comparison Matrix Table -->
+                <div class="overflow-x-auto max-w-4xl mx-auto">
+                    <table class="w-full text-left text-xs border-collapse border border-brand-border bg-white rounded-xl overflow-hidden">
+                        <thead>
+                            <tr class="bg-brand-light border-b border-brand-border text-brand-muted uppercase text-[10px] font-bold">
+                                <th class="py-4 px-6">Capability Matrix</th>
+                                <th class="py-4 px-6">Traditional Business</th>
+                                <th class="py-4 px-6 text-brand-blue bg-brand-blue/5">Martyard Platform</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-brand-border">
+                            <tr>
+                                <td class="py-4 px-6 font-semibold text-brand-dark">Online Storefront</td>
+                                <td class="py-4 px-6 text-brand-muted">Offline only</td>
+                                <td class="py-4 px-6 text-brand-emerald font-bold bg-brand-blue/5">✓ Standard online presence</td>
+                            </tr>
+                            <tr>
+                                <td class="py-4 px-6 font-semibold text-brand-dark">Ordering Mechanism</td>
+                                <td class="py-4 px-6 text-brand-muted">Manual orders only</td>
+                                <td class="py-4 px-6 text-brand-emerald font-bold bg-brand-blue/5">✓ Digital Orders system</td>
+                            </tr>
+                            <tr>
+                                <td class="py-4 px-6 font-semibold text-brand-dark">Store Ledger Analytics</td>
+                                <td class="py-4 px-6 text-brand-muted">No dashboard metrics</td>
+                                <td class="py-4 px-6 text-brand-emerald font-bold bg-brand-blue/5">✓ Standard Business Dashboard</td>
+                            </tr>
+                            <tr>
+                                <td class="py-4 px-6 font-semibold text-brand-dark">Operation Database</td>
+                                <td class="py-4 px-6 text-brand-muted">Paper records/notebooks</td>
+                                <td class="py-4 px-6 text-brand-emerald font-bold bg-brand-blue/5">✓ Cloud Management database</td>
+                            </tr>
+                            <tr>
+                                <td class="py-4 px-6 font-semibold text-brand-dark">Client Radius Reach</td>
+                                <td class="py-4 px-6 text-brand-muted">Limited physical reach</td>
+                                <td class="py-4 px-6 text-brand-emerald font-bold bg-brand-blue/5">✓ Local discovery indices</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- 10. Pricing Section -->
+        <section id="pricing" class="py-24 bg-white">
+            <div class="max-w-7xl mx-auto px-6 space-y-16">
+                
+                <div class="text-center max-w-3xl mx-auto space-y-4">
+                    <span class="text-xs font-bold tracking-widest text-brand-indigo uppercase block">Pricing Models</span>
+                    <h2 class="text-3xl font-extrabold text-brand-dark tracking-tight">Predictable & Sane Licensing</h2>
+                    <p class="text-brand-muted text-sm">Choose the exact subscription tier that matches your business model. No hidden brokerage commissions or contract traps.</p>
+                </div>
+
+                <!-- 3 Columns Pricing Grid -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl mx-auto">
+                    
+                    <!-- Starter Tier -->
+                    <div class="bg-white border border-brand-border rounded-xl p-8 space-y-6 flex flex-col justify-between">
+                        <div class="space-y-4">
+                            <span class="text-xs font-bold font-mono text-brand-muted uppercase block">Starter Pack</span>
+                            <h3 class="text-2xl font-extrabold text-brand-dark">₹499<span class="text-xs text-brand-muted font-normal"> /month</span></h3>
+                            <p class="text-brand-muted text-xs leading-relaxed">Perfect for single-operator neighborhood shops starting to build an online storefront database.</p>
+                            <ul class="space-y-2 text-xs text-brand-muted border-t border-brand-border pt-4">
+                                <li>✔ Standard Store Profile page</li>
+                                <li>✔ Basic Product Catalog lists</li>
+                                <li>✔ Basic Customer enquiries routing</li>
+                            </ul>
+                        </div>
+                        <a href="#contact" class="block w-full py-3 bg-brand-light border border-brand-border hover:bg-brand-border text-brand-dark rounded-lg text-xs font-bold text-center transition-all">Get Started</a>
+                    </div>
+
+                    <!-- Business Tier (Popular) -->
+                    <div class="bg-white border-2 border-brand-blue rounded-xl p-8 space-y-6 flex flex-col justify-between relative shadow-md">
+                        <span class="absolute top-0 right-6 -translate-y-1/2 bg-brand-blue text-white px-2.5 py-0.5 text-[9px] font-bold uppercase rounded-full">Most Popular</span>
+                        <div class="space-y-4">
+                            <span class="text-xs font-bold font-mono text-brand-blue uppercase block">Business Tier</span>
+                            <h3 class="text-2xl font-extrabold text-brand-dark">₹999<span class="text-xs text-brand-muted font-normal"> /month</span></h3>
+                            <p class="text-brand-muted text-xs leading-relaxed">Designed for growing regional diagnostic labs, medical centers, boutiques, and multi-employee operations.</p>
+                            <ul class="space-y-2 text-xs text-brand-muted border-t border-brand-border pt-4">
+                                <li>✔ Advanced customized storefronts</li>
+                                <li>✔ Unlimited Catalog items uploads</li>
+                                <li>✔ Real-time SMS and email enquiry logs</li>
+                                <li>✔ Localized COD delivery routing</li>
+                            </ul>
+                        </div>
+                        <a href="#contact" class="block w-full py-3 bg-brand-blue hover:bg-blue-700 text-white rounded-lg text-xs font-bold text-center transition-all shadow-md">Get Started</a>
+                    </div>
+
+                    <!-- Enterprise Tier -->
+                    <div class="bg-white border border-brand-border rounded-xl p-8 space-y-6 flex flex-col justify-between">
+                        <div class="space-y-4">
+                            <span class="text-xs font-bold font-mono text-brand-muted uppercase block">Enterprise</span>
+                            <h3 class="text-2xl font-extrabold text-brand-dark">Custom</h3>
+                            <p class="text-brand-muted text-xs leading-relaxed">Built for multi-branch clinics, localized chains, and complex merchant database integrations.</p>
+                            <ul class="space-y-2 text-xs text-brand-muted border-t border-brand-border pt-4">
+                                <li>✔ Dedicated account managers</li>
+                                <li>✔ Multi-branch manager database</li>
+                                <li>✔ Specialized API integration links</li>
+                                <li>✔ Custom service level metrics</li>
+                            </ul>
+                        </div>
+                        <a href="#contact" class="block w-full py-3 bg-brand-light border border-brand-border hover:bg-brand-border text-brand-dark rounded-lg text-xs font-bold text-center transition-all">Contact Sales</a>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- 11. FAQ Section -->
+        <section class="py-24 bg-brand-light border-t border-b border-brand-border">
+            <div class="max-w-4xl mx-auto px-6 space-y-12">
+                <div class="text-center space-y-4">
+                    <span class="text-xs font-bold tracking-widest text-brand-blue uppercase block">Support Knowledgebase</span>
+                    <h2 class="text-3xl font-extrabold text-brand-dark tracking-tight">Frequently Asked Questions</h2>
+                </div>
+
+                <!-- FAQ Accordion List -->
+                <div class="space-y-3">
+                    
+                    <!-- Accordion 1 -->
+                    <div class="bg-white border border-brand-border rounded-xl overflow-hidden">
+                        <button onclick="toggleFaqAccordion(1)" class="w-full p-5 text-left flex justify-between items-center text-sm font-bold text-brand-dark focus:outline-none">
+                            <span>What is Martyard?</span>
+                            <span id="faq-icon-1" class="transition-transform duration-200">▼</span>
+                        </button>
+                        <div id="faq-content-1" class="hidden p-5 border-t border-brand-border text-xs text-brand-muted leading-relaxed">
+                            Martyard is an all-in-one digital commerce platform that helps offline physical businesses create modern storefront profiles, organize inventory catalogues, track customer enquiries, and direct local dispatches instantly.
+                        </div>
+                    </div>
+
+                    <!-- Accordion 2 -->
+                    <div class="bg-white border border-brand-border rounded-xl overflow-hidden">
+                        <button onclick="toggleFaqAccordion(2)" class="w-full p-5 text-left flex justify-between items-center text-sm font-bold text-brand-dark focus:outline-none">
+                            <span>Who can use Martyard?</span>
+                            <span id="faq-icon-2" class="transition-transform duration-200">▼</span>
+                        </button>
+                        <div id="faq-content-2" class="hidden p-5 border-t border-brand-border text-xs text-brand-muted leading-relaxed">
+                            Any neighborhood business looking to grow online. Our systems are optimized to serve restaurants, diagnostic labs, clinics, retail hardware nodes, clothing boutiques, furniture dealers, and regional educational units.
+                        </div>
+                    </div>
+
+                    <!-- Accordion 3 -->
+                    <div class="bg-white border border-brand-border rounded-xl overflow-hidden">
+                        <button onclick="toggleFaqAccordion(3)" class="w-full p-5 text-left flex justify-between items-center text-sm font-bold text-brand-dark focus:outline-none">
+                            <span>Do you support COD?</span>
+                            <span id="faq-icon-3" class="transition-transform duration-200">▼</span>
+                        </button>
+                        <div id="faq-content-3" class="hidden p-5 border-t border-brand-border text-xs text-brand-muted leading-relaxed">
+                            Yes. Martyard’s flexible logistics dispatch workspace matches Cash-On-Delivery (COD) parameters, allowing dispatch personnel to coordinate self-fulfilled or third-party courier dispatches cleanly.
+                        </div>
+                    </div>
+
+                    <!-- Accordion 4 -->
+                    <div class="bg-white border border-brand-border rounded-xl overflow-hidden">
+                        <button onclick="toggleFaqAccordion(4)" class="w-full p-5 text-left flex justify-between items-center text-sm font-bold text-brand-dark focus:outline-none">
+                            <span>Can I manage multiple branches?</span>
+                            <span id="faq-icon-4" class="transition-transform duration-200">▼</span>
+                        </button>
+                        <div id="faq-content-4" class="hidden p-5 border-t border-brand-border text-xs text-brand-muted leading-relaxed">
+                            Our Enterprise tier includes customized multi-branch dashboard databases, designed to sync products and coordinate customer enquiries across multiple distinct geographical branch points.
+                        </div>
+                    </div>
+
+                    <!-- Accordion 5 -->
+                    <div class="bg-white border border-brand-border rounded-xl overflow-hidden">
+                        <button onclick="toggleFaqAccordion(5)" class="w-full p-5 text-left flex justify-between items-center text-sm font-bold text-brand-dark focus:outline-none">
+                            <span>How do customers contact businesses?</span>
+                            <span id="faq-icon-5" class="transition-transform duration-200">▼</span>
+                        </button>
+                        <div id="faq-content-5" class="hidden p-5 border-t border-brand-border text-xs text-brand-muted leading-relaxed">
+                            Buyers visit your dedicated profile store URL directly from any standard mobile web browser. They can make catalog selections and trigger automated enquiries that link straight into your dashboard.
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- 12. Contact Section -->
+        <section id="contact" class="max-w-7xl mx-auto px-6 py-24">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-start">
+                
+                <!-- Left: Information details -->
+                <div class="lg:col-span-5 space-y-6">
+                    <span class="text-xs font-bold tracking-widest text-brand-blue uppercase block">Onboarding Hub</span>
+                    <h2 class="text-3xl font-extrabold text-brand-dark tracking-tight leading-tight">Begin Your Digital Operations Journey</h2>
+                    <p class="text-brand-muted text-sm leading-relaxed">
+                        Complete our onboarding intake matrix. Once received, our regional Maharashtra deployment team will coordinate physical address verification steps and initialize your custom dashboard.
+                    </p>
+                    <div class="space-y-4 text-xs text-brand-muted">
+                        <p class="flex items-center gap-3">
+                            <span class="font-bold text-brand-dark">Email Support:</span> info@martyard.co
+                        </p>
+                        <p class="flex items-center gap-3">
+                            <span class="font-bold text-brand-dark">Support Hotline:</span> +91 80 4028 9031
+                        </p>
+                        <p class="flex items-center gap-3">
+                            <span class="font-bold text-brand-dark">Headquarters:</span> Bengaluru Tech Corridor, Karnataka, India
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Right: High Fidelity Secure Form -->
+                <div class="lg:col-span-7 bg-brand-light border border-brand-border rounded-xl p-8 shadow-sm">
+                    <form action="#" onsubmit="event.preventDefault(); submitRegistrationForm();" class="space-y-4">
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <div class="space-y-1">
+                                <label class="block text-[10px] font-bold text-brand-muted uppercase">Merchant Full Name</label>
+                                <input type="text" id="form-name" required placeholder="e.g. Ramesh Patil" class="w-full p-3 bg-white border border-brand-border text-brand-dark placeholder-slate-400 rounded-lg text-xs focus:outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue">
+                            </div>
+                            <div class="space-y-1">
+                                <label class="block text-[10px] font-bold text-brand-muted uppercase">Official Mobile Number</label>
+                                <input type="tel" id="form-tel" required placeholder="e.g. +91 98765 43210" class="w-full p-3 bg-white border border-brand-border text-brand-dark placeholder-slate-400 rounded-lg text-xs focus:outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue">
+                            </div>
+                        </div>
+                        <div class="space-y-1">
+                            <label class="block text-[10px] font-bold text-brand-muted uppercase">Physical Business Address</label>
+                            <input type="text" id="form-addr" required placeholder="e.g. Shop No. 12, Shivaji Road, Shivaji road in Shivaji road" class="w-full p-3 bg-white border border-brand-border text-brand-dark placeholder-slate-400 rounded-lg text-xs focus:outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue">
+                        </div>
+                        <div class="space-y-1">
+                            <label class="block text-[10px] font-bold text-brand-muted uppercase">Select Sector Category</label>
+                            <select id="form-sector" class="w-full p-3 bg-white border border-brand-border text-brand-dark rounded-lg text-xs focus:outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue">
+                                <option>Diagnostic Lab & Clinic</option>
+                                <option>Medical & Pharmacy Store</option>
+                                <option>Neighborhood Kirana & Groceries</option>
+                                <option>Retail Hardware Store</option>
+                                <option>Clothing & Apparel Boutique</option>
+                                <option>Local Restaurant / Food Joint</option>
+                            </select>
+                        </div>
+                        <button type="submit" class="w-full py-3 bg-brand-blue hover:bg-blue-700 text-white rounded-lg text-xs font-bold uppercase tracking-wider transition-all shadow-sm active:scale-[0.98]">
+                            Request System Activation
+                        </button>
+                    </form>
+                </div>
+
+            </div>
         </section>
 
     </main>
 
-    <!-- Global Footer -->
-    <footer class="border-t border-slate-900 bg-slate-950 py-16 relative z-10 text-xs text-slate-500">
+    <!-- Global Official Footer -->
+    <footer class="border-t border-brand-border bg-brand-light py-16 relative z-10 text-xs text-brand-muted">
         <div class="max-w-7xl mx-auto px-6 space-y-12">
             
             <div class="grid grid-cols-1 md:grid-cols-12 gap-8 items-start">
                 
                 <!-- Left brand block -->
                 <div class="md:col-span-4 space-y-4">
-                    <div class="flex items-center space-x-3">
-                        <div class="w-8 h-8 bg-gradient-to-tr from-accent-blue to-accent-emerald rounded-lg flex items-center justify-center font-bold text-white text-sm">
+                    <div class="flex items-center space-x-2.5">
+                        <div class="w-7 h-7 bg-brand-blue rounded-lg flex items-center justify-center font-bold text-white text-sm">
                             M
                         </div>
-                        <span class="text-sm font-bold text-white tracking-tight">Martyard</span>
+                        <span class="text-sm font-bold text-brand-dark tracking-tight">Martyard</span>
                     </div>
-                    <p class="text-slate-400 max-w-sm">
-                        Building modern commercial operations frameworks for India's massive regional merchant ecosystem. Designed, engineered, and structured in Kolhapur, Maharashtra.
+                    <p class="text-xs text-brand-muted max-w-sm leading-relaxed">
+                        Building direct, reliable, and high-performance digital commerce operations software for regional Indian businesses and neighborhood enterprises.
                     </p>
                 </div>
 
                 <!-- Right navigational links -->
-                <div class="md:col-span-8 grid grid-cols-2 sm:grid-cols-3 gap-8">
+                <div class="md:col-span-8 grid grid-cols-2 sm:grid-cols-4 gap-8">
                     <div class="space-y-3">
-                        <p class="text-slate-200 font-bold uppercase tracking-wider text-[10px]">Strategic Assets</p>
+                        <p class="text-brand-dark font-bold uppercase tracking-wider text-[10px]">Solutions</p>
                         <ul class="space-y-2">
-                            <li><a href="#why" class="hover:text-slate-300">Why Martyard OS</a></li>
-                            <li><a href="#how" class="hover:text-slate-300">How It Works</a></li>
-                            <li><a href="#product" class="hover:text-slate-300">System Sandbox</a></li>
+                            <li><a href="#features" class="hover:text-brand-dark">Catalog Manager</a></li>
+                            <li><a href="#about" class="hover:text-brand-dark">Online Profiles</a></li>
+                            <li><a href="#dashboard" class="hover:text-brand-dark">Local Delivery COD</a></li>
                         </ul>
                     </div>
 
                     <div class="space-y-3">
-                        <p class="text-slate-200 font-bold uppercase tracking-wider text-[10px]">Investor Relations</p>
+                        <p class="text-brand-dark font-bold uppercase tracking-wider text-[10px]">Company</p>
                         <ul class="space-y-2">
-                            <li><a href="#market" class="hover:text-slate-300">TAM Breakdown</a></li>
-                            <li><a href="#revenue" class="hover:text-slate-300">Unit SaaS Models</a></li>
-                            <li><a href="#roadmap" class="hover:text-slate-300">Phased Execution Plan</a></li>
+                            <li><a href="#about" class="hover:text-brand-dark">About Product</a></li>
+                            <li><a href="#how-it-works" class="hover:text-brand-dark">How It Works</a></li>
+                            <li><a href="#pricing" class="hover:text-brand-dark">Standard Pricing</a></li>
                         </ul>
                     </div>
 
                     <div class="space-y-3">
-                        <p class="text-slate-200 font-bold uppercase tracking-wider text-[10px]">Headquarters</p>
-                        <p class="text-slate-400">
-                            Kolhapur Innovation Hub,<br>
-                            Shivaji Road, Maharashtra,<br>
-                            India
+                        <p class="text-brand-dark font-bold uppercase tracking-wider text-[10px]">Legal</p>
+                        <ul class="space-y-2">
+                            <li><a href="#about" class="hover:text-brand-dark">Privacy Policy</a></li>
+                            <li><a href="#about" class="hover:text-brand-dark">Terms of Service</a></li>
+                            <li><a href="#about" class="hover:text-brand-dark">Carrier Openings</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="space-y-3">
+                        <p class="text-brand-dark font-bold uppercase tracking-wider text-[10px]">Office Location</p>
+                        <p class="text-brand-muted leading-relaxed">
+                            Bengaluru Tech Corridor,<br>
+                            Karnataka, India
                         </p>
                     </div>
                 </div>
@@ -948,63 +971,84 @@
             </div>
 
             <!-- Bottom Disclaimer/Sovereign Badge -->
-            <div class="pt-8 border-t border-slate-900 flex flex-col sm:flex-row items-center justify-between gap-4">
-                <p>© 2026 Martyard Digital Infrastructure. Independent operating platforms. All rights reserved.</p>
+            <div class="pt-8 border-t border-brand-border flex flex-col sm:flex-row items-center justify-between gap-4">
+                <p>&copy; 2026 Martyard Digital Infrastructure Private Limited. Sovereign operating platforms. All rights reserved.</p>
                 <div class="flex items-center space-x-2">
-                    <span class="w-2.5 h-2.5 rounded-full bg-accent-emerald"></span>
-                    <span class="font-bold tracking-widest text-[9px] text-slate-300 uppercase">Make in India Compliant</span>
+                    <span class="w-2 h-2 rounded-full bg-brand-emerald"></span>
+                    <span class="font-bold tracking-widest text-[9px] text-brand-dark uppercase">Make in India Compliant</span>
                 </div>
             </div>
 
         </div>
     </footer>
 
-    <!-- Interactive JS Core -->
+    <!-- Interactive JS Functionality Core -->
     <script>
-        // High fidelity view switcher logic
-        function switchProductMockup(activePaneId) {
-            const panes = ['desktop-dash', 'customer-app', 'delivery-app', 'admin-panel'];
+        // Tab switching controller for Product Mockups
+        function switchTab(activeTabId) {
+            const tabs = ['business-dashboard', 'customer-app', 'admin-panel', 'delivery-dashboard'];
             
-            panes.forEach(pane => {
-                const btn = document.getElementById('btn-' + pane);
-                const block = document.getElementById('pane-' + pane);
+            tabs.forEach(tab => {
+                const btn = document.getElementById('btn-' + tab);
+                const block = document.getElementById('pane-' + tab);
                 
-                if (pane === activePaneId) {
-                    btn.className = "px-4 py-2 bg-slate-900 text-white rounded font-bold transition-all";
+                if (tab === activeTabId) {
+                    btn.className = "px-4 py-2 bg-white text-brand-dark font-semibold rounded-lg text-xs shadow-sm transition-all";
                     block.classList.remove('hidden');
                 } else {
-                    btn.className = "px-4 py-2 text-slate-400 hover:text-white rounded font-medium transition-all";
+                    btn.className = "px-4 py-2 text-brand-muted hover:text-brand-dark font-medium rounded-lg text-xs transition-all";
                     block.classList.add('hidden');
                 }
             });
-
-            // Dynamic browser header text title
-            const header = document.getElementById('mockup-header-title');
-            if (activePaneId === 'desktop-dash') header.innerText = "DESKTOP_MERCHANT_CONSOLE.DAT";
-            if (activePaneId === 'customer-app') header.innerText = "HYPERLOCAL_CUSTOMER_INDEX.XML";
-            if (activePaneId === 'delivery-app') header.innerText = "LOCAL_LOGISTICS_MANIFEST.SYS";
-            if (activePaneId === 'admin-panel') header.innerText = "SYSTEM_ADMIN_CORE_INTERFACE.LOG";
         }
 
-        // Demo submit notification simulation (Clean modern dialog modal)
-        function triggerDemoNotification() {
-            const container = document.body;
-            const notificationBox = document.createElement('div');
-            notificationBox.className = "fixed bottom-8 right-8 z-50 p-5 bg-slate-900 border border-slate-850 rounded-xl shadow-2xl flex items-center space-x-4 max-w-sm animate-bounce";
-            notificationBox.innerHTML = `
-                <div class="w-10 h-10 bg-accent-emerald/10 border border-accent-emerald/20 text-accent-emerald rounded-lg flex items-center justify-center font-bold">✓</div>
-                <div>
-                    <h5 class="text-xs font-bold text-white uppercase">Inquiry Dispatched</h5>
-                    <p class="text-[10px] text-slate-400">Our investor relations team will connect with your fund credentials immediately.</p>
+        // Accordion collapsible logic for FAQs
+        function toggleFaqAccordion(num) {
+            const content = document.getElementById('faq-content-' + num);
+            const icon = document.getElementById('faq-icon-' + num);
+            
+            if (content.classList.contains('hidden')) {
+                content.classList.remove('hidden');
+                icon.style.transform = 'rotate(180deg)';
+            } else {
+                content.classList.add('hidden');
+                icon.style.transform = 'rotate(0deg)';
+            }
+        }
+
+        // Onboarding Registration Form submit popup
+        function submitRegistrationForm() {
+            const nameVal = document.getElementById('form-name').value.trim();
+            const sectorVal = document.getElementById('form-sector').value;
+            
+            // Replaces legacy alert logs with a clean corporate modal wrapper
+            const modal = document.createElement('div');
+            modal.className = "fixed inset-0 z-50 flex items-center justify-center bg-brand-dark/50 backdrop-blur-sm p-4";
+            modal.innerHTML = `
+                <div class="bg-white border border-brand-border p-8 rounded-xl max-w-sm w-full space-y-4 shadow-xl">
+                    <div class="w-12 h-12 bg-brand-emerald/10 border border-brand-emerald/20 text-brand-emerald rounded-full flex items-center justify-center mx-auto text-lg">
+                        ✓
+                    </div>
+                    <div class="text-center space-y-1.5">
+                        <h4 class="text-base font-bold text-brand-dark">Submission Successful</h4>
+                        <p class="text-xs text-brand-muted leading-relaxed">
+                            Thank you ${nameVal}. Our deployment team has received your registration request for ${sectorVal}. We will contact you shortly.
+                        </p>
+                    </div>
+                    <button onclick="this.parentElement.parentElement.remove()" class="w-full py-2 bg-brand-blue hover:bg-blue-700 text-white text-xs font-semibold rounded-lg transition-all">
+                        Dismiss
+                    </button>
                 </div>
             `;
-            container.appendChild(notificationBox);
-            setTimeout(() => {
-                notificationBox.remove();
-            }, 6000);
+            document.body.appendChild(modal);
+
+            // Reset manual form input elements
+            document.getElementById('form-name').value = '';
+            document.getElementById('form-tel').value = '';
+            document.getElementById('form-addr').value = '';
         }
 
-        // Mobile responsive menu toggle logic
+        // Mobile responsive dropdown menu toggle
         const toggleBtn = document.getElementById('mobile-menu-toggle');
         const mobileMenu = document.getElementById('mobile-menu');
         toggleBtn.addEventListener('click', () => {
